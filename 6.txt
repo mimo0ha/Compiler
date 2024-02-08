@@ -1,0 +1,30 @@
+if (7 +50 and - 70) <= 10 :
+    print(10)
+else :
+    print("eleven")
+def m ("anna",x):
+    if i <= 100 :
+        print("if in def")
+    elif (18 - 70 * 9 > 8)  :
+        return "return in if"
+    else:
+        return "hii else"
+    while (6 >= x /y) :
+        if True and False :
+            break
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+

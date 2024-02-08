@@ -1,0 +1,5506 @@
+Terminals which are not used
+
+   ID
+   STRING
+   EQ
+   SEMICOLON
+   KEYWORD
+   DIGIT
+   DECIMAL
+   LETTER
+   ALPHANUM
+   OPERATORS
+   OR
+   AND
+
+
+State 251 conflicts: 1 shift/reduce
+State 318 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: code $end
+
+    1 code: mycode
+
+    2 mycode: mycode in
+    3       | mycode output
+    4       | mycode function
+    5       | mycode whileloop
+    6       | mycode if
+    7       | mycode tryrule
+    8       | mycode for
+    9       | mycode assignment
+   10       | mycode listrule
+   11       | mycode NEWLINE
+   12       | mycode PASS
+   13       | mycode import
+   14       | mycode from
+   15       | mycode class
+   16       | class
+   17       | in
+   18       | output
+   19       | function
+   20       | whileloop
+   21       | if
+   22       | tryrule
+   23       | for
+   24       | assignment
+   25       | listrule
+   26       | PASS
+   27       | import
+   28       | from
+   29       | NEWLINE
+
+   30 stm: output NEWLINE
+   31    | in NEWLINE
+   32    | whileloop
+   33    | for
+   34    | tryrule
+
+   35 statements: simple_stmt_return NEWLINE
+   36           | statements simple_stmt_return NEWLINE
+   37           | stm
+   38           | statements stm
+   39           | if
+   40           | statements if
+   41           | PASS
+   42           | statements PASS
+   43           | listrule NEWLINE
+   44           | statements listrule NEWLINE
+   45           | NEWLINE
+
+   46 ifstatementsforloops: ifstatementsforloops simple_stmt_break NEWLINE
+   47                     | condition
+   48                     | ifstatementsforloops condition
+   49                     | NEWLINE
+   50                     | ifstatementsforloops NEWLINE
+   51                     | simple_stmt_break NEWLINE
+   52                     | ifstatementsforloops stm
+   53                     | stm
+   54                     | PASS
+   55                     | ifstatementsforloops PASS
+   56                     | listrule NEWLINE
+   57                     | ifstatementsforloops listrule NEWLINE
+
+   58 ifstatements: ifstatements assignment NEWLINE
+   59             | ifcondition
+   60             | ifstatements ifcondition
+   61             | NEWLINE
+   62             | ifstatements NEWLINE
+   63             | assignment NEWLINE
+   64             | ifstatements stm
+   65             | stm
+   66             | PASS
+   67             | ifstatements PASS
+   68             | listrule NEWLINE
+   69             | ifstatements listrule NEWLINE
+
+   70 whilestatements: whilestatements simple_stmt_break NEWLINE
+   71                | simple_stmt_break NEWLINE
+   72                | NEWLINE
+   73                | stm
+   74                | whilestatements stm
+   75                | whilestatements NEWLINE
+   76                | whilestatements ifforloops
+   77                | ifforloops
+   78                | PASS
+   79                | whilestatements PASS
+   80                | listrule NEWLINE
+   81                | whilestatements listrule NEWLINE
+
+   82 forstatements: forstatements simple_stmt_break NEWLINE
+   83              | NEWLINE
+   84              | forstatements NEWLINE
+   85              | simple_stmt_break NEWLINE
+   86              | forstatements stm
+   87              | stm
+   88              | forstatements ifforloops
+   89              | ifforloops
+
+   90 trystatements: simple_stmt_return NEWLINE
+   91              | trystatements simple_stmt_return NEWLINE
+   92              | stm
+   93              | trystatements stm
+   94              | if
+   95              | trystatements if
+   96              | PASS
+   97              | trystatements PASS
+   98              | listrule NEWLINE
+   99              | trystatements listrule NEWLINE
+  100              | NEWLINE
+
+  101 simple_stmt_return: assignment
+  102                   | return_stmt
+
+  103 simple_stmt_break: assignment
+  104                  | BREAK
+  105                  | CONTINUE
+
+  106 return_stmt: RETURN inreturn
+
+  107 inreturn: inreturn COMMA arg
+  108         | arg
+
+  109 assignment: IDENTIFIER ASSIGN expression
+  110           | IDENTIFIER ASSIGN in
+  111           | IDENTIFIER ASSIGN listrule
+
+  112 expression: expression PLUS expression
+  113           | expression MINUS expression
+  114           | expression MUL expression
+  115           | expression DIVIDE expression
+  116           | '|' expression
+  117           | LBRACKET expression RBRACKET
+  118           | MINUS expression
+  119           | NUMBER
+  120           | STRING_LITERAL
+  121           | IDENTIFIER
+  122           | TRUE
+  123           | FALSE
+
+  124 function: DEF IDENTIFIER LBRACKET args RBRACKET COLON block
+
+  125 args: /* empty */
+  126     | args_
+
+  127 args_: arg
+  128      | args_ COMMA arg
+
+  129 arg: IDENTIFIER
+  130    | NUMBER
+  131    | STRING_LITERAL
+
+  132 block: NEWLINE INDENTAITON statements DENTAITON
+
+  133 ifforloops: ifconditionforloops
+
+  134 ifconditionforloops: IF LBRACKET condition RBRACKET COLON ifblockforloops elifstatementforloops
+  135                    | IF LBRACKET condition RBRACKET COLON ifblockforloops elsestatementforloops
+  136                    | IF LBRACKET condition RBRACKET COLON ifblockforloops
+  137                    | IF condition COLON ifblockforloops elifstatementforloops
+  138                    | IF condition COLON ifblockforloops elsestatementforloops
+  139                    | IF condition COLON ifblockforloops
+
+  140 elifstatementforloops: ELIF LBRACKET condition RBRACKET COLON ifblockforloops
+  141                      | ELIF LBRACKET condition RBRACKET COLON ifblockforloops elsestatementforloops
+  142                      | ELIF LBRACKET condition RBRACKET COLON ifblockforloops elifstatementforloops
+  143                      | ELIF condition COLON ifblockforloops
+  144                      | ELIF condition COLON ifblockforloops elsestatementforloops
+  145                      | ELIF condition COLON ifblockforloops elifstatementforloops
+
+  146 elsestatementforloops: ELSE COLON ifblockforloops
+
+  147 ifblockforloops: NEWLINE INDENTAITON ifstatementsforloops DENTAITON
+
+  148 if: ifcondition
+
+  149 ifcondition: IF LBRACKET condition RBRACKET COLON ifblock elifstatement
+  150            | IF LBRACKET condition RBRACKET COLON ifblock elsestatement
+  151            | IF LBRACKET condition RBRACKET COLON ifblock
+  152            | IF condition COLON ifblock elifstatement
+  153            | IF condition COLON ifblock elsestatement
+  154            | IF condition COLON ifblock
+
+  155 elifstatement: ELIF LBRACKET condition RBRACKET COLON ifblock
+  156              | ELIF LBRACKET condition RBRACKET COLON ifblock elsestatement
+  157              | ELIF LBRACKET condition RBRACKET COLON ifblock elifstatement
+  158              | ELIF condition COLON ifblock
+  159              | ELIF condition COLON ifblock elsestatement
+  160              | ELIF condition COLON ifblock elifstatement
+
+  161 elsestatement: ELSE COLON ifblock
+
+  162 ifblock: NEWLINE INDENTAITON ifstatements DENTAITON
+
+  163 condition: IDENTIFIER EQUAL IDENTIFIER
+  164          | IDENTIFIER EQUAL NUMBER
+  165          | NUMBER EQUAL NUMBER
+  166          | IDENTIFIER
+  167          | NUMBER
+  168          | IDENTIFIER LESSTHAN NUMBER
+  169          | NUMBER LESSTHAN NUMBER
+  170          | IDENTIFIER LESSTHAN ASSIGN NUMBER
+  171          | NUMBER LESSTHAN ASSIGN NUMBER
+  172          | IDENTIFIER GREATERTHAN NUMBER
+  173          | NUMBER GREATERTHAN NUMBER
+  174          | IDENTIFIER GREATERTHAN ASSIGN NUMBER
+  175          | NUMBER GREATERTHAN ASSIGN NUMBER
+  176          | IDENTIFIER LESSTHAN IDENTIFIER
+  177          | IDENTIFIER GREATERTHAN IDENTIFIER
+  178          | IDENTIFIER LESSTHAN ASSIGN IDENTIFIER
+  179          | IDENTIFIER GREATERTHAN ASSIGN IDENTIFIER
+  180          | STRING_LITERAL
+  181          | STRING_LITERAL LESSTHAN STRING_LITERAL
+  182          | STRING_LITERAL GREATERTHAN STRING_LITERAL
+  183          | STRING_LITERAL LESSTHAN ASSIGN STRING_LITERAL
+  184          | STRING_LITERAL GREATERTHAN ASSIGN STRING_LITERAL
+  185          | STRING_LITERAL EQUAL STRING_LITERAL
+  186          | TRUE EQUAL TRUE
+  187          | FALSE EQUAL FALSE
+  188          | TRUE EQUAL FALSE
+  189          | FALSE EQUAL TRUE
+  190          | TRUE
+  191          | FALSE
+  192          | IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN IDENTIFIER
+  193          | IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  194          | IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN IDENTIFIER
+  195          | IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  196          | NUMBER LESSTHAN NUMBER LESSTHAN NUMBER
+  197          | NUMBER LESSTHAN EQUAL NUMBER LESSTHAN EQUAL NUMBER
+  198          | NUMBER LESSTHAN EQUAL NUMBER LESSTHAN NUMBER
+  199          | NUMBER LESSTHAN NUMBER LESSTHAN EQUAL NUMBER
+  200          | NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN EQUAL NUMBER
+  201          | NUMBER GREATERTHAN NUMBER GREATERTHAN NUMBER
+  202          | NUMBER GREATERTHAN NUMBER GREATERTHAN EQUAL NUMBER
+  203          | NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN NUMBER
+  204          | IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN IDENTIFIER
+  205          | IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+  206          | IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN IDENTIFIER
+  207          | IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+
+  208 whileloop: WHILE LBRACKET condition RBRACKET COLON whileblock
+  209          | WHILE condition COLON whileblock
+
+  210 whileblock: NEWLINE INDENTAITON whilestatements DENTAITON
+
+  211 for: for_header COLON forblock
+
+  212 for_header: FOR IDENTIFIER IN list
+
+  213 forblock: NEWLINE INDENTAITON forstatements DENTAITON
+
+  214 list: IDENTIFIER
+  215     | STRING_LITERAL
+  216     | range
+  217     | listrule
+
+  218 range: RANGE LBRACKET forparams RBRACKET
+
+  219 forparams: expression COMMA expression COMMA expression
+  220          | expression COMMA expression
+  221          | expression
+
+  222 tryrule: try_except
+
+  223 try: TRY COLON NEWLINE INDENTAITON trystatements DENTAITON
+  224    | TRY COLON NEWLINE INDENTAITON trystatements try_except DENTAITON
+  225    | TRY COLON NEWLINE INDENTAITON try_except DENTAITON
+
+  226 except: EXCEPT COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+  227 finally: FINALLY COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+  228 tryelse: ELSE COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+  229 except_name: EXCEPT IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON
+  230            | EXCEPT IDENTIFIER AS IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+  231 try_except: try except
+  232           | try except tryelse
+  233           | try except_name
+  234           | try except_name except
+  235           | try except_name tryelse
+  236           | try except finally
+  237           | try except tryelse finally
+  238           | try except_name finally
+  239           | try except_name except finally
+  240           | try except_name tryelse finally
+
+  241 output: PRINT LBRACKET txtn RBRACKET
+
+  242 in: INPUT LBRACKET txtn RBRACKET
+
+  243 txtn: txtn PLUS txtn
+  244     | txtnt
+
+  245 txtnt: NUMBER
+  246      | IDENTIFIER
+  247      | txtw
+
+  248 txtw: txtw STRING_LITERAL
+  249     | STRING_LITERAL
+
+  250 listrule: SQUAREBL inlist SQUAREBR
+
+  251 inlist: inlist COMMA arg
+  252       | inlist COMMA arg NEWLINE
+  253       | inlist COMMA NEWLINE arg
+  254       | arg
+  255       | NEWLINE
+
+  256 class: CLASS IDENTIFIER COLON classblock
+  257      | CLASS IDENTIFIER LBRACKET classargs RBRACKET COLON classblock
+
+  258 classargs: classargs COMMA IDENTIFIER
+  259          | IDENTIFIER
+
+  260 classblock: NEWLINE INDENTAITON mycode DENTAITON
+
+  261 import: IMPORT IDENTIFIER
+  262       | IMPORT IDENTIFIER path
+  263       | IMPORT path AS IDENTIFIER
+
+  264 from: FROM IDENTIFIER path IMPORT IDENTIFIER
+
+  265 path: DOT IDENTIFIER
+  266     | path DOT IDENTIFIER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'|' (124) 116
+error (256)
+ID (258)
+STRING (259)
+ASSIGN (260) 109 110 111 170 171 174 175 178 179 183 184
+RETURN (261) 106
+EQ (262)
+PLUS (263) 112 243
+MINUS (264) 113 118
+MUL (265) 114
+DIVIDE (266) 115
+SEMICOLON (267)
+EQUAL (268) 163 164 165 185 186 187 188 189 193 194 195 197 198 199
+    200 202 203 205 206 207
+PRINT (269) 241
+KEYWORD (270)
+IDENTIFIER (271) 109 110 111 121 124 129 163 164 166 168 170 172 174
+    176 177 178 179 192 193 194 195 204 205 206 207 212 214 229 230
+    246 256 257 258 259 261 262 263 264 265 266
+DEF (272) 124
+INDENTAITON (273) 132 147 162 210 213 223 224 225 226 227 228 229 230
+    260
+DENTAITON (274) 132 147 162 210 213 223 224 225 226 227 228 229 230
+    260
+NEWLINE (275) 11 29 30 31 35 36 43 44 45 46 49 50 51 56 57 58 61 62
+    63 68 69 70 71 72 75 80 81 82 83 84 85 90 91 98 99 100 132 147
+    162 210 213 223 224 225 226 227 228 229 230 252 253 255 260
+STRING_LITERAL (276) 120 131 180 181 182 183 184 185 215 248 249
+DIGIT (277)
+NUMBER (278) 119 130 164 165 167 168 169 170 171 172 173 174 175 196
+    197 198 199 200 201 202 203 245
+DECIMAL (279)
+LETTER (280)
+ALPHANUM (281)
+OPERATORS (282)
+COLON (283) 124 134 135 136 137 138 139 140 141 142 143 144 145 146
+    149 150 151 152 153 154 155 156 157 158 159 160 161 208 209 211
+    223 224 225 226 227 228 229 230 256 257
+ELSE (284) 146 161 228
+IF (285) 134 135 136 137 138 139 149 150 151 152 153 154
+FOR (286) 212
+WHILE (287) 208 209
+INPUT (288) 242
+EXCEPT (289) 226 229 230
+TRY (290) 223 224 225
+ELIF (291) 140 141 142 143 144 145 155 156 157 158 159 160
+LBRACKET (292) 117 124 134 135 136 140 141 142 149 150 151 155 156
+    157 208 218 241 242 257
+RBRACKET (293) 117 124 134 135 136 140 141 142 149 150 151 155 156
+    157 208 218 241 242 257
+TRUE (294) 122 186 188 189 190
+FALSE (295) 123 187 188 189 191
+COMMA (296) 107 128 219 220 251 252 253 258
+GREATERTHAN (297) 172 173 174 175 177 179 182 184 200 201 202 203 204
+    205 206 207
+LESSTHAN (298) 168 169 170 171 176 178 181 183 192 193 194 195 196
+    197 198 199
+AS (299) 230 263
+FINALLY (300) 227
+IN (301) 212
+RANGE (302) 218
+BREAK (303) 104
+CONTINUE (304) 105
+SQUAREBL (305) 250
+SQUAREBR (306) 250
+PASS (307) 12 26 41 42 54 55 66 67 78 79 96 97
+IMPORT (308) 261 262 263 264
+DOT (309) 265 266
+CLASS (310) 256 257
+FROM (311) 264
+OR (312)
+AND (313)
+UMINUS (314)
+
+
+Nonterminals, with rules where they appear
+
+$accept (61)
+    on left: 0
+code (62)
+    on left: 1, on right: 0
+mycode (63)
+    on left: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22
+    23 24 25 26 27 28 29, on right: 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+    15 260
+stm (64)
+    on left: 30 31 32 33 34, on right: 37 38 52 53 64 65 73 74 86 87
+    92 93
+statements (65)
+    on left: 35 36 37 38 39 40 41 42 43 44 45, on right: 36 38 40 42
+    44 132
+ifstatementsforloops (66)
+    on left: 46 47 48 49 50 51 52 53 54 55 56 57, on right: 46 48 50
+    52 55 57 147
+ifstatements (67)
+    on left: 58 59 60 61 62 63 64 65 66 67 68 69, on right: 58 60 62
+    64 67 69 162
+whilestatements (68)
+    on left: 70 71 72 73 74 75 76 77 78 79 80 81, on right: 70 74 75
+    76 79 81 210
+forstatements (69)
+    on left: 82 83 84 85 86 87 88 89, on right: 82 84 86 88 213
+trystatements (70)
+    on left: 90 91 92 93 94 95 96 97 98 99 100, on right: 91 93 95
+    97 99 223 224 226 227 228 229 230
+simple_stmt_return (71)
+    on left: 101 102, on right: 35 36 90 91
+simple_stmt_break (72)
+    on left: 103 104 105, on right: 46 51 70 71 82 85
+return_stmt (73)
+    on left: 106, on right: 102
+inreturn (74)
+    on left: 107 108, on right: 106 107
+assignment (75)
+    on left: 109 110 111, on right: 9 24 58 63 101 103
+expression (76)
+    on left: 112 113 114 115 116 117 118 119 120 121 122 123,
+    on right: 109 112 113 114 115 116 117 118 219 220 221
+function (77)
+    on left: 124, on right: 4 19
+args (78)
+    on left: 125 126, on right: 124
+args_ (79)
+    on left: 127 128, on right: 126 128
+arg (80)
+    on left: 129 130 131, on right: 107 108 127 128 251 252 253 254
+block (81)
+    on left: 132, on right: 124
+ifforloops (82)
+    on left: 133, on right: 76 77 88 89
+ifconditionforloops (83)
+    on left: 134 135 136 137 138 139, on right: 133
+elifstatementforloops (84)
+    on left: 140 141 142 143 144 145, on right: 134 137 142 145
+elsestatementforloops (85)
+    on left: 146, on right: 135 138 141 144
+ifblockforloops (86)
+    on left: 147, on right: 134 135 136 137 138 139 140 141 142 143
+    144 145 146
+if (87)
+    on left: 148, on right: 6 21 39 40 94 95
+ifcondition (88)
+    on left: 149 150 151 152 153 154, on right: 59 60 148
+elifstatement (89)
+    on left: 155 156 157 158 159 160, on right: 149 152 157 160
+elsestatement (90)
+    on left: 161, on right: 150 153 156 159
+ifblock (91)
+    on left: 162, on right: 149 150 151 152 153 154 155 156 157 158
+    159 160 161
+condition (92)
+    on left: 163 164 165 166 167 168 169 170 171 172 173 174 175 176
+    177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192
+    193 194 195 196 197 198 199 200 201 202 203 204 205 206 207,
+    on right: 47 48 134 135 136 137 138 139 140 141 142 143 144 145
+    149 150 151 152 153 154 155 156 157 158 159 160 208 209
+whileloop (93)
+    on left: 208 209, on right: 5 20 32
+whileblock (94)
+    on left: 210, on right: 208 209
+for (95)
+    on left: 211, on right: 8 23 33
+for_header (96)
+    on left: 212, on right: 211
+forblock (97)
+    on left: 213, on right: 211
+list (98)
+    on left: 214 215 216 217, on right: 212
+range (99)
+    on left: 218, on right: 216
+forparams (100)
+    on left: 219 220 221, on right: 218
+tryrule (101)
+    on left: 222, on right: 7 22 34
+try (102)
+    on left: 223 224 225, on right: 231 232 233 234 235 236 237 238
+    239 240
+except (103)
+    on left: 226, on right: 231 232 234 236 237 239
+finally (104)
+    on left: 227, on right: 236 237 238 239 240
+tryelse (105)
+    on left: 228, on right: 232 235 237 240
+except_name (106)
+    on left: 229 230, on right: 233 234 235 238 239 240
+try_except (107)
+    on left: 231 232 233 234 235 236 237 238 239 240,
+    on right: 222 224 225
+output (108)
+    on left: 241, on right: 3 18 30
+in (109)
+    on left: 242, on right: 2 17 31 110
+txtn (110)
+    on left: 243 244, on right: 241 242 243
+txtnt (111)
+    on left: 245 246 247, on right: 244
+txtw (112)
+    on left: 248 249, on right: 247 248
+listrule (113)
+    on left: 250, on right: 10 25 43 44 56 57 68 69 80 81 98 99 111
+    217
+inlist (114)
+    on left: 251 252 253 254 255, on right: 250 251 252 253
+class (115)
+    on left: 256 257, on right: 15 16
+classargs (116)
+    on left: 258 259, on right: 257 258
+classblock (117)
+    on left: 260, on right: 256 257
+import (118)
+    on left: 261 262 263, on right: 13 27
+from (119)
+    on left: 264, on right: 14 28
+path (120)
+    on left: 265 266, on right: 262 263 264 266
+
+
+state 0
+
+    0 $accept: . code $end
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DEF         shift, and go to state 3
+    NEWLINE     shift, and go to state 4
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 11
+    IMPORT      shift, and go to state 12
+    CLASS       shift, and go to state 13
+    FROM        shift, and go to state 14
+
+    code         go to state 15
+    mycode       go to state 16
+    assignment   go to state 17
+    function     go to state 18
+    if           go to state 19
+    ifcondition  go to state 20
+    whileloop    go to state 21
+    for          go to state 22
+    for_header   go to state 23
+    tryrule      go to state 24
+    try          go to state 25
+    try_except   go to state 26
+    output       go to state 27
+    in           go to state 28
+    listrule     go to state 29
+    class        go to state 30
+    import       go to state 31
+    from         go to state 32
+
+
+state 1
+
+  241 output: PRINT . LBRACKET txtn RBRACKET
+
+    LBRACKET  shift, and go to state 33
+
+
+state 2
+
+  109 assignment: IDENTIFIER . ASSIGN expression
+  110           | IDENTIFIER . ASSIGN in
+  111           | IDENTIFIER . ASSIGN listrule
+
+    ASSIGN  shift, and go to state 34
+
+
+state 3
+
+  124 function: DEF . IDENTIFIER LBRACKET args RBRACKET COLON block
+
+    IDENTIFIER  shift, and go to state 35
+
+
+state 4
+
+   29 mycode: NEWLINE .
+
+    $default  reduce using rule 29 (mycode)
+
+
+state 5
+
+  149 ifcondition: IF . LBRACKET condition RBRACKET COLON ifblock elifstatement
+  150            | IF . LBRACKET condition RBRACKET COLON ifblock elsestatement
+  151            | IF . LBRACKET condition RBRACKET COLON ifblock
+  152            | IF . condition COLON ifblock elifstatement
+  153            | IF . condition COLON ifblock elsestatement
+  154            | IF . condition COLON ifblock
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    LBRACKET        shift, and go to state 39
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 42
+
+
+state 6
+
+  212 for_header: FOR . IDENTIFIER IN list
+
+    IDENTIFIER  shift, and go to state 43
+
+
+state 7
+
+  208 whileloop: WHILE . LBRACKET condition RBRACKET COLON whileblock
+  209          | WHILE . condition COLON whileblock
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    LBRACKET        shift, and go to state 44
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 45
+
+
+state 8
+
+  242 in: INPUT . LBRACKET txtn RBRACKET
+
+    LBRACKET  shift, and go to state 46
+
+
+state 9
+
+  223 try: TRY . COLON NEWLINE INDENTAITON trystatements DENTAITON
+  224    | TRY . COLON NEWLINE INDENTAITON trystatements try_except DENTAITON
+  225    | TRY . COLON NEWLINE INDENTAITON try_except DENTAITON
+
+    COLON  shift, and go to state 47
+
+
+state 10
+
+  250 listrule: SQUAREBL . inlist SQUAREBR
+
+    IDENTIFIER      shift, and go to state 48
+    NEWLINE         shift, and go to state 49
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    arg     go to state 52
+    inlist  go to state 53
+
+
+state 11
+
+   26 mycode: PASS .
+
+    $default  reduce using rule 26 (mycode)
+
+
+state 12
+
+  261 import: IMPORT . IDENTIFIER
+  262       | IMPORT . IDENTIFIER path
+  263       | IMPORT . path AS IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 54
+    DOT         shift, and go to state 55
+
+    path  go to state 56
+
+
+state 13
+
+  256 class: CLASS . IDENTIFIER COLON classblock
+  257      | CLASS . IDENTIFIER LBRACKET classargs RBRACKET COLON classblock
+
+    IDENTIFIER  shift, and go to state 57
+
+
+state 14
+
+  264 from: FROM . IDENTIFIER path IMPORT IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 58
+
+
+state 15
+
+    0 $accept: code . $end
+
+    $end  shift, and go to state 59
+
+
+state 16
+
+    1 code: mycode .
+    2 mycode: mycode . in
+    3       | mycode . output
+    4       | mycode . function
+    5       | mycode . whileloop
+    6       | mycode . if
+    7       | mycode . tryrule
+    8       | mycode . for
+    9       | mycode . assignment
+   10       | mycode . listrule
+   11       | mycode . NEWLINE
+   12       | mycode . PASS
+   13       | mycode . import
+   14       | mycode . from
+   15       | mycode . class
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DEF         shift, and go to state 3
+    NEWLINE     shift, and go to state 60
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 61
+    IMPORT      shift, and go to state 12
+    CLASS       shift, and go to state 13
+    FROM        shift, and go to state 14
+
+    $default  reduce using rule 1 (code)
+
+    assignment   go to state 62
+    function     go to state 63
+    if           go to state 64
+    ifcondition  go to state 20
+    whileloop    go to state 65
+    for          go to state 66
+    for_header   go to state 23
+    tryrule      go to state 67
+    try          go to state 25
+    try_except   go to state 26
+    output       go to state 68
+    in           go to state 69
+    listrule     go to state 70
+    class        go to state 71
+    import       go to state 72
+    from         go to state 73
+
+
+state 17
+
+   24 mycode: assignment .
+
+    $default  reduce using rule 24 (mycode)
+
+
+state 18
+
+   19 mycode: function .
+
+    $default  reduce using rule 19 (mycode)
+
+
+state 19
+
+   21 mycode: if .
+
+    $default  reduce using rule 21 (mycode)
+
+
+state 20
+
+  148 if: ifcondition .
+
+    $default  reduce using rule 148 (if)
+
+
+state 21
+
+   20 mycode: whileloop .
+
+    $default  reduce using rule 20 (mycode)
+
+
+state 22
+
+   23 mycode: for .
+
+    $default  reduce using rule 23 (mycode)
+
+
+state 23
+
+  211 for: for_header . COLON forblock
+
+    COLON  shift, and go to state 74
+
+
+state 24
+
+   22 mycode: tryrule .
+
+    $default  reduce using rule 22 (mycode)
+
+
+state 25
+
+  231 try_except: try . except
+  232           | try . except tryelse
+  233           | try . except_name
+  234           | try . except_name except
+  235           | try . except_name tryelse
+  236           | try . except finally
+  237           | try . except tryelse finally
+  238           | try . except_name finally
+  239           | try . except_name except finally
+  240           | try . except_name tryelse finally
+
+    EXCEPT  shift, and go to state 75
+
+    except       go to state 76
+    except_name  go to state 77
+
+
+state 26
+
+  222 tryrule: try_except .
+
+    $default  reduce using rule 222 (tryrule)
+
+
+state 27
+
+   18 mycode: output .
+
+    $default  reduce using rule 18 (mycode)
+
+
+state 28
+
+   17 mycode: in .
+
+    $default  reduce using rule 17 (mycode)
+
+
+state 29
+
+   25 mycode: listrule .
+
+    $default  reduce using rule 25 (mycode)
+
+
+state 30
+
+   16 mycode: class .
+
+    $default  reduce using rule 16 (mycode)
+
+
+state 31
+
+   27 mycode: import .
+
+    $default  reduce using rule 27 (mycode)
+
+
+state 32
+
+   28 mycode: from .
+
+    $default  reduce using rule 28 (mycode)
+
+
+state 33
+
+  241 output: PRINT LBRACKET . txtn RBRACKET
+
+    IDENTIFIER      shift, and go to state 78
+    STRING_LITERAL  shift, and go to state 79
+    NUMBER          shift, and go to state 80
+
+    txtn   go to state 81
+    txtnt  go to state 82
+    txtw   go to state 83
+
+
+state 34
+
+  109 assignment: IDENTIFIER ASSIGN . expression
+  110           | IDENTIFIER ASSIGN . in
+  111           | IDENTIFIER ASSIGN . listrule
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    INPUT           shift, and go to state 8
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    SQUAREBL        shift, and go to state 10
+    '|'             shift, and go to state 91
+
+    expression  go to state 92
+    in          go to state 93
+    listrule    go to state 94
+
+
+state 35
+
+  124 function: DEF IDENTIFIER . LBRACKET args RBRACKET COLON block
+
+    LBRACKET  shift, and go to state 95
+
+
+state 36
+
+  163 condition: IDENTIFIER . EQUAL IDENTIFIER
+  164          | IDENTIFIER . EQUAL NUMBER
+  166          | IDENTIFIER .
+  168          | IDENTIFIER . LESSTHAN NUMBER
+  170          | IDENTIFIER . LESSTHAN ASSIGN NUMBER
+  172          | IDENTIFIER . GREATERTHAN NUMBER
+  174          | IDENTIFIER . GREATERTHAN ASSIGN NUMBER
+  176          | IDENTIFIER . LESSTHAN IDENTIFIER
+  177          | IDENTIFIER . GREATERTHAN IDENTIFIER
+  178          | IDENTIFIER . LESSTHAN ASSIGN IDENTIFIER
+  179          | IDENTIFIER . GREATERTHAN ASSIGN IDENTIFIER
+  192          | IDENTIFIER . LESSTHAN IDENTIFIER LESSTHAN IDENTIFIER
+  193          | IDENTIFIER . LESSTHAN EQUAL IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  194          | IDENTIFIER . LESSTHAN EQUAL IDENTIFIER LESSTHAN IDENTIFIER
+  195          | IDENTIFIER . LESSTHAN IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  204          | IDENTIFIER . GREATERTHAN IDENTIFIER GREATERTHAN IDENTIFIER
+  205          | IDENTIFIER . GREATERTHAN EQUAL IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+  206          | IDENTIFIER . GREATERTHAN EQUAL IDENTIFIER GREATERTHAN IDENTIFIER
+  207          | IDENTIFIER . GREATERTHAN IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+
+    EQUAL        shift, and go to state 96
+    GREATERTHAN  shift, and go to state 97
+    LESSTHAN     shift, and go to state 98
+
+    $default  reduce using rule 166 (condition)
+
+
+state 37
+
+  180 condition: STRING_LITERAL .
+  181          | STRING_LITERAL . LESSTHAN STRING_LITERAL
+  182          | STRING_LITERAL . GREATERTHAN STRING_LITERAL
+  183          | STRING_LITERAL . LESSTHAN ASSIGN STRING_LITERAL
+  184          | STRING_LITERAL . GREATERTHAN ASSIGN STRING_LITERAL
+  185          | STRING_LITERAL . EQUAL STRING_LITERAL
+
+    EQUAL        shift, and go to state 99
+    GREATERTHAN  shift, and go to state 100
+    LESSTHAN     shift, and go to state 101
+
+    $default  reduce using rule 180 (condition)
+
+
+state 38
+
+  165 condition: NUMBER . EQUAL NUMBER
+  167          | NUMBER .
+  169          | NUMBER . LESSTHAN NUMBER
+  171          | NUMBER . LESSTHAN ASSIGN NUMBER
+  173          | NUMBER . GREATERTHAN NUMBER
+  175          | NUMBER . GREATERTHAN ASSIGN NUMBER
+  196          | NUMBER . LESSTHAN NUMBER LESSTHAN NUMBER
+  197          | NUMBER . LESSTHAN EQUAL NUMBER LESSTHAN EQUAL NUMBER
+  198          | NUMBER . LESSTHAN EQUAL NUMBER LESSTHAN NUMBER
+  199          | NUMBER . LESSTHAN NUMBER LESSTHAN EQUAL NUMBER
+  200          | NUMBER . GREATERTHAN EQUAL NUMBER GREATERTHAN EQUAL NUMBER
+  201          | NUMBER . GREATERTHAN NUMBER GREATERTHAN NUMBER
+  202          | NUMBER . GREATERTHAN NUMBER GREATERTHAN EQUAL NUMBER
+  203          | NUMBER . GREATERTHAN EQUAL NUMBER GREATERTHAN NUMBER
+
+    EQUAL        shift, and go to state 102
+    GREATERTHAN  shift, and go to state 103
+    LESSTHAN     shift, and go to state 104
+
+    $default  reduce using rule 167 (condition)
+
+
+state 39
+
+  149 ifcondition: IF LBRACKET . condition RBRACKET COLON ifblock elifstatement
+  150            | IF LBRACKET . condition RBRACKET COLON ifblock elsestatement
+  151            | IF LBRACKET . condition RBRACKET COLON ifblock
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 105
+
+
+state 40
+
+  186 condition: TRUE . EQUAL TRUE
+  188          | TRUE . EQUAL FALSE
+  190          | TRUE .
+
+    EQUAL  shift, and go to state 106
+
+    $default  reduce using rule 190 (condition)
+
+
+state 41
+
+  187 condition: FALSE . EQUAL FALSE
+  189          | FALSE . EQUAL TRUE
+  191          | FALSE .
+
+    EQUAL  shift, and go to state 107
+
+    $default  reduce using rule 191 (condition)
+
+
+state 42
+
+  152 ifcondition: IF condition . COLON ifblock elifstatement
+  153            | IF condition . COLON ifblock elsestatement
+  154            | IF condition . COLON ifblock
+
+    COLON  shift, and go to state 108
+
+
+state 43
+
+  212 for_header: FOR IDENTIFIER . IN list
+
+    IN  shift, and go to state 109
+
+
+state 44
+
+  208 whileloop: WHILE LBRACKET . condition RBRACKET COLON whileblock
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 110
+
+
+state 45
+
+  209 whileloop: WHILE condition . COLON whileblock
+
+    COLON  shift, and go to state 111
+
+
+state 46
+
+  242 in: INPUT LBRACKET . txtn RBRACKET
+
+    IDENTIFIER      shift, and go to state 78
+    STRING_LITERAL  shift, and go to state 79
+    NUMBER          shift, and go to state 80
+
+    txtn   go to state 112
+    txtnt  go to state 82
+    txtw   go to state 83
+
+
+state 47
+
+  223 try: TRY COLON . NEWLINE INDENTAITON trystatements DENTAITON
+  224    | TRY COLON . NEWLINE INDENTAITON trystatements try_except DENTAITON
+  225    | TRY COLON . NEWLINE INDENTAITON try_except DENTAITON
+
+    NEWLINE  shift, and go to state 113
+
+
+state 48
+
+  129 arg: IDENTIFIER .
+
+    $default  reduce using rule 129 (arg)
+
+
+state 49
+
+  255 inlist: NEWLINE .
+
+    $default  reduce using rule 255 (inlist)
+
+
+state 50
+
+  131 arg: STRING_LITERAL .
+
+    $default  reduce using rule 131 (arg)
+
+
+state 51
+
+  130 arg: NUMBER .
+
+    $default  reduce using rule 130 (arg)
+
+
+state 52
+
+  254 inlist: arg .
+
+    $default  reduce using rule 254 (inlist)
+
+
+state 53
+
+  250 listrule: SQUAREBL inlist . SQUAREBR
+  251 inlist: inlist . COMMA arg
+  252       | inlist . COMMA arg NEWLINE
+  253       | inlist . COMMA NEWLINE arg
+
+    COMMA     shift, and go to state 114
+    SQUAREBR  shift, and go to state 115
+
+
+state 54
+
+  261 import: IMPORT IDENTIFIER .
+  262       | IMPORT IDENTIFIER . path
+
+    DOT  shift, and go to state 55
+
+    $default  reduce using rule 261 (import)
+
+    path  go to state 116
+
+
+state 55
+
+  265 path: DOT . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 117
+
+
+state 56
+
+  263 import: IMPORT path . AS IDENTIFIER
+  266 path: path . DOT IDENTIFIER
+
+    AS   shift, and go to state 118
+    DOT  shift, and go to state 119
+
+
+state 57
+
+  256 class: CLASS IDENTIFIER . COLON classblock
+  257      | CLASS IDENTIFIER . LBRACKET classargs RBRACKET COLON classblock
+
+    COLON     shift, and go to state 120
+    LBRACKET  shift, and go to state 121
+
+
+state 58
+
+  264 from: FROM IDENTIFIER . path IMPORT IDENTIFIER
+
+    DOT  shift, and go to state 55
+
+    path  go to state 122
+
+
+state 59
+
+    0 $accept: code $end .
+
+    $default  accept
+
+
+state 60
+
+   11 mycode: mycode NEWLINE .
+
+    $default  reduce using rule 11 (mycode)
+
+
+state 61
+
+   12 mycode: mycode PASS .
+
+    $default  reduce using rule 12 (mycode)
+
+
+state 62
+
+    9 mycode: mycode assignment .
+
+    $default  reduce using rule 9 (mycode)
+
+
+state 63
+
+    4 mycode: mycode function .
+
+    $default  reduce using rule 4 (mycode)
+
+
+state 64
+
+    6 mycode: mycode if .
+
+    $default  reduce using rule 6 (mycode)
+
+
+state 65
+
+    5 mycode: mycode whileloop .
+
+    $default  reduce using rule 5 (mycode)
+
+
+state 66
+
+    8 mycode: mycode for .
+
+    $default  reduce using rule 8 (mycode)
+
+
+state 67
+
+    7 mycode: mycode tryrule .
+
+    $default  reduce using rule 7 (mycode)
+
+
+state 68
+
+    3 mycode: mycode output .
+
+    $default  reduce using rule 3 (mycode)
+
+
+state 69
+
+    2 mycode: mycode in .
+
+    $default  reduce using rule 2 (mycode)
+
+
+state 70
+
+   10 mycode: mycode listrule .
+
+    $default  reduce using rule 10 (mycode)
+
+
+state 71
+
+   15 mycode: mycode class .
+
+    $default  reduce using rule 15 (mycode)
+
+
+state 72
+
+   13 mycode: mycode import .
+
+    $default  reduce using rule 13 (mycode)
+
+
+state 73
+
+   14 mycode: mycode from .
+
+    $default  reduce using rule 14 (mycode)
+
+
+state 74
+
+  211 for: for_header COLON . forblock
+
+    NEWLINE  shift, and go to state 123
+
+    forblock  go to state 124
+
+
+state 75
+
+  226 except: EXCEPT . COLON NEWLINE INDENTAITON trystatements DENTAITON
+  229 except_name: EXCEPT . IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON
+  230            | EXCEPT . IDENTIFIER AS IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    IDENTIFIER  shift, and go to state 125
+    COLON       shift, and go to state 126
+
+
+state 76
+
+  231 try_except: try except .
+  232           | try except . tryelse
+  236           | try except . finally
+  237           | try except . tryelse finally
+
+    ELSE     shift, and go to state 127
+    FINALLY  shift, and go to state 128
+
+    $default  reduce using rule 231 (try_except)
+
+    finally  go to state 129
+    tryelse  go to state 130
+
+
+state 77
+
+  233 try_except: try except_name .
+  234           | try except_name . except
+  235           | try except_name . tryelse
+  238           | try except_name . finally
+  239           | try except_name . except finally
+  240           | try except_name . tryelse finally
+
+    ELSE     shift, and go to state 127
+    EXCEPT   shift, and go to state 131
+    FINALLY  shift, and go to state 128
+
+    $default  reduce using rule 233 (try_except)
+
+    except   go to state 132
+    finally  go to state 133
+    tryelse  go to state 134
+
+
+state 78
+
+  246 txtnt: IDENTIFIER .
+
+    $default  reduce using rule 246 (txtnt)
+
+
+state 79
+
+  249 txtw: STRING_LITERAL .
+
+    $default  reduce using rule 249 (txtw)
+
+
+state 80
+
+  245 txtnt: NUMBER .
+
+    $default  reduce using rule 245 (txtnt)
+
+
+state 81
+
+  241 output: PRINT LBRACKET txtn . RBRACKET
+  243 txtn: txtn . PLUS txtn
+
+    PLUS      shift, and go to state 135
+    RBRACKET  shift, and go to state 136
+
+
+state 82
+
+  244 txtn: txtnt .
+
+    $default  reduce using rule 244 (txtn)
+
+
+state 83
+
+  247 txtnt: txtw .
+  248 txtw: txtw . STRING_LITERAL
+
+    STRING_LITERAL  shift, and go to state 137
+
+    $default  reduce using rule 247 (txtnt)
+
+
+state 84
+
+  118 expression: MINUS . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 138
+
+
+state 85
+
+  121 expression: IDENTIFIER .
+
+    $default  reduce using rule 121 (expression)
+
+
+state 86
+
+  120 expression: STRING_LITERAL .
+
+    $default  reduce using rule 120 (expression)
+
+
+state 87
+
+  119 expression: NUMBER .
+
+    $default  reduce using rule 119 (expression)
+
+
+state 88
+
+  117 expression: LBRACKET . expression RBRACKET
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 139
+
+
+state 89
+
+  122 expression: TRUE .
+
+    $default  reduce using rule 122 (expression)
+
+
+state 90
+
+  123 expression: FALSE .
+
+    $default  reduce using rule 123 (expression)
+
+
+state 91
+
+  116 expression: '|' . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 140
+
+
+state 92
+
+  109 assignment: IDENTIFIER ASSIGN expression .
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+
+    PLUS    shift, and go to state 141
+    MINUS   shift, and go to state 142
+    MUL     shift, and go to state 143
+    DIVIDE  shift, and go to state 144
+
+    $default  reduce using rule 109 (assignment)
+
+
+state 93
+
+  110 assignment: IDENTIFIER ASSIGN in .
+
+    $default  reduce using rule 110 (assignment)
+
+
+state 94
+
+  111 assignment: IDENTIFIER ASSIGN listrule .
+
+    $default  reduce using rule 111 (assignment)
+
+
+state 95
+
+  124 function: DEF IDENTIFIER LBRACKET . args RBRACKET COLON block
+
+    IDENTIFIER      shift, and go to state 48
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    $default  reduce using rule 125 (args)
+
+    args   go to state 145
+    args_  go to state 146
+    arg    go to state 147
+
+
+state 96
+
+  163 condition: IDENTIFIER EQUAL . IDENTIFIER
+  164          | IDENTIFIER EQUAL . NUMBER
+
+    IDENTIFIER  shift, and go to state 148
+    NUMBER      shift, and go to state 149
+
+
+state 97
+
+  172 condition: IDENTIFIER GREATERTHAN . NUMBER
+  174          | IDENTIFIER GREATERTHAN . ASSIGN NUMBER
+  177          | IDENTIFIER GREATERTHAN . IDENTIFIER
+  179          | IDENTIFIER GREATERTHAN . ASSIGN IDENTIFIER
+  204          | IDENTIFIER GREATERTHAN . IDENTIFIER GREATERTHAN IDENTIFIER
+  205          | IDENTIFIER GREATERTHAN . EQUAL IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+  206          | IDENTIFIER GREATERTHAN . EQUAL IDENTIFIER GREATERTHAN IDENTIFIER
+  207          | IDENTIFIER GREATERTHAN . IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+
+    ASSIGN      shift, and go to state 150
+    EQUAL       shift, and go to state 151
+    IDENTIFIER  shift, and go to state 152
+    NUMBER      shift, and go to state 153
+
+
+state 98
+
+  168 condition: IDENTIFIER LESSTHAN . NUMBER
+  170          | IDENTIFIER LESSTHAN . ASSIGN NUMBER
+  176          | IDENTIFIER LESSTHAN . IDENTIFIER
+  178          | IDENTIFIER LESSTHAN . ASSIGN IDENTIFIER
+  192          | IDENTIFIER LESSTHAN . IDENTIFIER LESSTHAN IDENTIFIER
+  193          | IDENTIFIER LESSTHAN . EQUAL IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  194          | IDENTIFIER LESSTHAN . EQUAL IDENTIFIER LESSTHAN IDENTIFIER
+  195          | IDENTIFIER LESSTHAN . IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+
+    ASSIGN      shift, and go to state 154
+    EQUAL       shift, and go to state 155
+    IDENTIFIER  shift, and go to state 156
+    NUMBER      shift, and go to state 157
+
+
+state 99
+
+  185 condition: STRING_LITERAL EQUAL . STRING_LITERAL
+
+    STRING_LITERAL  shift, and go to state 158
+
+
+state 100
+
+  182 condition: STRING_LITERAL GREATERTHAN . STRING_LITERAL
+  184          | STRING_LITERAL GREATERTHAN . ASSIGN STRING_LITERAL
+
+    ASSIGN          shift, and go to state 159
+    STRING_LITERAL  shift, and go to state 160
+
+
+state 101
+
+  181 condition: STRING_LITERAL LESSTHAN . STRING_LITERAL
+  183          | STRING_LITERAL LESSTHAN . ASSIGN STRING_LITERAL
+
+    ASSIGN          shift, and go to state 161
+    STRING_LITERAL  shift, and go to state 162
+
+
+state 102
+
+  165 condition: NUMBER EQUAL . NUMBER
+
+    NUMBER  shift, and go to state 163
+
+
+state 103
+
+  173 condition: NUMBER GREATERTHAN . NUMBER
+  175          | NUMBER GREATERTHAN . ASSIGN NUMBER
+  200          | NUMBER GREATERTHAN . EQUAL NUMBER GREATERTHAN EQUAL NUMBER
+  201          | NUMBER GREATERTHAN . NUMBER GREATERTHAN NUMBER
+  202          | NUMBER GREATERTHAN . NUMBER GREATERTHAN EQUAL NUMBER
+  203          | NUMBER GREATERTHAN . EQUAL NUMBER GREATERTHAN NUMBER
+
+    ASSIGN  shift, and go to state 164
+    EQUAL   shift, and go to state 165
+    NUMBER  shift, and go to state 166
+
+
+state 104
+
+  169 condition: NUMBER LESSTHAN . NUMBER
+  171          | NUMBER LESSTHAN . ASSIGN NUMBER
+  196          | NUMBER LESSTHAN . NUMBER LESSTHAN NUMBER
+  197          | NUMBER LESSTHAN . EQUAL NUMBER LESSTHAN EQUAL NUMBER
+  198          | NUMBER LESSTHAN . EQUAL NUMBER LESSTHAN NUMBER
+  199          | NUMBER LESSTHAN . NUMBER LESSTHAN EQUAL NUMBER
+
+    ASSIGN  shift, and go to state 167
+    EQUAL   shift, and go to state 168
+    NUMBER  shift, and go to state 169
+
+
+state 105
+
+  149 ifcondition: IF LBRACKET condition . RBRACKET COLON ifblock elifstatement
+  150            | IF LBRACKET condition . RBRACKET COLON ifblock elsestatement
+  151            | IF LBRACKET condition . RBRACKET COLON ifblock
+
+    RBRACKET  shift, and go to state 170
+
+
+state 106
+
+  186 condition: TRUE EQUAL . TRUE
+  188          | TRUE EQUAL . FALSE
+
+    TRUE   shift, and go to state 171
+    FALSE  shift, and go to state 172
+
+
+state 107
+
+  187 condition: FALSE EQUAL . FALSE
+  189          | FALSE EQUAL . TRUE
+
+    TRUE   shift, and go to state 173
+    FALSE  shift, and go to state 174
+
+
+state 108
+
+  152 ifcondition: IF condition COLON . ifblock elifstatement
+  153            | IF condition COLON . ifblock elsestatement
+  154            | IF condition COLON . ifblock
+
+    NEWLINE  shift, and go to state 175
+
+    ifblock  go to state 176
+
+
+state 109
+
+  212 for_header: FOR IDENTIFIER IN . list
+
+    IDENTIFIER      shift, and go to state 177
+    STRING_LITERAL  shift, and go to state 178
+    RANGE           shift, and go to state 179
+    SQUAREBL        shift, and go to state 10
+
+    list      go to state 180
+    range     go to state 181
+    listrule  go to state 182
+
+
+state 110
+
+  208 whileloop: WHILE LBRACKET condition . RBRACKET COLON whileblock
+
+    RBRACKET  shift, and go to state 183
+
+
+state 111
+
+  209 whileloop: WHILE condition COLON . whileblock
+
+    NEWLINE  shift, and go to state 184
+
+    whileblock  go to state 185
+
+
+state 112
+
+  242 in: INPUT LBRACKET txtn . RBRACKET
+  243 txtn: txtn . PLUS txtn
+
+    PLUS      shift, and go to state 135
+    RBRACKET  shift, and go to state 186
+
+
+state 113
+
+  223 try: TRY COLON NEWLINE . INDENTAITON trystatements DENTAITON
+  224    | TRY COLON NEWLINE . INDENTAITON trystatements try_except DENTAITON
+  225    | TRY COLON NEWLINE . INDENTAITON try_except DENTAITON
+
+    INDENTAITON  shift, and go to state 187
+
+
+state 114
+
+  251 inlist: inlist COMMA . arg
+  252       | inlist COMMA . arg NEWLINE
+  253       | inlist COMMA . NEWLINE arg
+
+    IDENTIFIER      shift, and go to state 48
+    NEWLINE         shift, and go to state 188
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    arg  go to state 189
+
+
+state 115
+
+  250 listrule: SQUAREBL inlist SQUAREBR .
+
+    $default  reduce using rule 250 (listrule)
+
+
+state 116
+
+  262 import: IMPORT IDENTIFIER path .
+  266 path: path . DOT IDENTIFIER
+
+    DOT  shift, and go to state 119
+
+    $default  reduce using rule 262 (import)
+
+
+state 117
+
+  265 path: DOT IDENTIFIER .
+
+    $default  reduce using rule 265 (path)
+
+
+state 118
+
+  263 import: IMPORT path AS . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 190
+
+
+state 119
+
+  266 path: path DOT . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 191
+
+
+state 120
+
+  256 class: CLASS IDENTIFIER COLON . classblock
+
+    NEWLINE  shift, and go to state 192
+
+    classblock  go to state 193
+
+
+state 121
+
+  257 class: CLASS IDENTIFIER LBRACKET . classargs RBRACKET COLON classblock
+
+    IDENTIFIER  shift, and go to state 194
+
+    classargs  go to state 195
+
+
+state 122
+
+  264 from: FROM IDENTIFIER path . IMPORT IDENTIFIER
+  266 path: path . DOT IDENTIFIER
+
+    IMPORT  shift, and go to state 196
+    DOT     shift, and go to state 119
+
+
+state 123
+
+  213 forblock: NEWLINE . INDENTAITON forstatements DENTAITON
+
+    INDENTAITON  shift, and go to state 197
+
+
+state 124
+
+  211 for: for_header COLON forblock .
+
+    $default  reduce using rule 211 (for)
+
+
+state 125
+
+  229 except_name: EXCEPT IDENTIFIER . COLON NEWLINE INDENTAITON trystatements DENTAITON
+  230            | EXCEPT IDENTIFIER . AS IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    COLON  shift, and go to state 198
+    AS     shift, and go to state 199
+
+
+state 126
+
+  226 except: EXCEPT COLON . NEWLINE INDENTAITON trystatements DENTAITON
+
+    NEWLINE  shift, and go to state 200
+
+
+state 127
+
+  228 tryelse: ELSE . COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    COLON  shift, and go to state 201
+
+
+state 128
+
+  227 finally: FINALLY . COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    COLON  shift, and go to state 202
+
+
+state 129
+
+  236 try_except: try except finally .
+
+    $default  reduce using rule 236 (try_except)
+
+
+state 130
+
+  232 try_except: try except tryelse .
+  237           | try except tryelse . finally
+
+    FINALLY  shift, and go to state 128
+
+    $default  reduce using rule 232 (try_except)
+
+    finally  go to state 203
+
+
+state 131
+
+  226 except: EXCEPT . COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    COLON  shift, and go to state 126
+
+
+state 132
+
+  234 try_except: try except_name except .
+  239           | try except_name except . finally
+
+    FINALLY  shift, and go to state 128
+
+    $default  reduce using rule 234 (try_except)
+
+    finally  go to state 204
+
+
+state 133
+
+  238 try_except: try except_name finally .
+
+    $default  reduce using rule 238 (try_except)
+
+
+state 134
+
+  235 try_except: try except_name tryelse .
+  240           | try except_name tryelse . finally
+
+    FINALLY  shift, and go to state 128
+
+    $default  reduce using rule 235 (try_except)
+
+    finally  go to state 205
+
+
+state 135
+
+  243 txtn: txtn PLUS . txtn
+
+    IDENTIFIER      shift, and go to state 78
+    STRING_LITERAL  shift, and go to state 79
+    NUMBER          shift, and go to state 80
+
+    txtn   go to state 206
+    txtnt  go to state 82
+    txtw   go to state 83
+
+
+state 136
+
+  241 output: PRINT LBRACKET txtn RBRACKET .
+
+    $default  reduce using rule 241 (output)
+
+
+state 137
+
+  248 txtw: txtw STRING_LITERAL .
+
+    $default  reduce using rule 248 (txtw)
+
+
+state 138
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  118           | MINUS expression .
+
+    $default  reduce using rule 118 (expression)
+
+
+state 139
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  117           | LBRACKET expression . RBRACKET
+
+    PLUS      shift, and go to state 141
+    MINUS     shift, and go to state 142
+    MUL       shift, and go to state 143
+    DIVIDE    shift, and go to state 144
+    RBRACKET  shift, and go to state 207
+
+
+state 140
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  116           | '|' expression .
+
+    $default  reduce using rule 116 (expression)
+
+
+state 141
+
+  112 expression: expression PLUS . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 208
+
+
+state 142
+
+  113 expression: expression MINUS . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 209
+
+
+state 143
+
+  114 expression: expression MUL . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 210
+
+
+state 144
+
+  115 expression: expression DIVIDE . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 211
+
+
+state 145
+
+  124 function: DEF IDENTIFIER LBRACKET args . RBRACKET COLON block
+
+    RBRACKET  shift, and go to state 212
+
+
+state 146
+
+  126 args: args_ .
+  128 args_: args_ . COMMA arg
+
+    COMMA  shift, and go to state 213
+
+    $default  reduce using rule 126 (args)
+
+
+state 147
+
+  127 args_: arg .
+
+    $default  reduce using rule 127 (args_)
+
+
+state 148
+
+  163 condition: IDENTIFIER EQUAL IDENTIFIER .
+
+    $default  reduce using rule 163 (condition)
+
+
+state 149
+
+  164 condition: IDENTIFIER EQUAL NUMBER .
+
+    $default  reduce using rule 164 (condition)
+
+
+state 150
+
+  174 condition: IDENTIFIER GREATERTHAN ASSIGN . NUMBER
+  179          | IDENTIFIER GREATERTHAN ASSIGN . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 214
+    NUMBER      shift, and go to state 215
+
+
+state 151
+
+  205 condition: IDENTIFIER GREATERTHAN EQUAL . IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+  206          | IDENTIFIER GREATERTHAN EQUAL . IDENTIFIER GREATERTHAN IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 216
+
+
+state 152
+
+  177 condition: IDENTIFIER GREATERTHAN IDENTIFIER .
+  204          | IDENTIFIER GREATERTHAN IDENTIFIER . GREATERTHAN IDENTIFIER
+  207          | IDENTIFIER GREATERTHAN IDENTIFIER . GREATERTHAN EQUAL IDENTIFIER
+
+    GREATERTHAN  shift, and go to state 217
+
+    $default  reduce using rule 177 (condition)
+
+
+state 153
+
+  172 condition: IDENTIFIER GREATERTHAN NUMBER .
+
+    $default  reduce using rule 172 (condition)
+
+
+state 154
+
+  170 condition: IDENTIFIER LESSTHAN ASSIGN . NUMBER
+  178          | IDENTIFIER LESSTHAN ASSIGN . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 218
+    NUMBER      shift, and go to state 219
+
+
+state 155
+
+  193 condition: IDENTIFIER LESSTHAN EQUAL . IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  194          | IDENTIFIER LESSTHAN EQUAL . IDENTIFIER LESSTHAN IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 220
+
+
+state 156
+
+  176 condition: IDENTIFIER LESSTHAN IDENTIFIER .
+  192          | IDENTIFIER LESSTHAN IDENTIFIER . LESSTHAN IDENTIFIER
+  195          | IDENTIFIER LESSTHAN IDENTIFIER . LESSTHAN EQUAL IDENTIFIER
+
+    LESSTHAN  shift, and go to state 221
+
+    $default  reduce using rule 176 (condition)
+
+
+state 157
+
+  168 condition: IDENTIFIER LESSTHAN NUMBER .
+
+    $default  reduce using rule 168 (condition)
+
+
+state 158
+
+  185 condition: STRING_LITERAL EQUAL STRING_LITERAL .
+
+    $default  reduce using rule 185 (condition)
+
+
+state 159
+
+  184 condition: STRING_LITERAL GREATERTHAN ASSIGN . STRING_LITERAL
+
+    STRING_LITERAL  shift, and go to state 222
+
+
+state 160
+
+  182 condition: STRING_LITERAL GREATERTHAN STRING_LITERAL .
+
+    $default  reduce using rule 182 (condition)
+
+
+state 161
+
+  183 condition: STRING_LITERAL LESSTHAN ASSIGN . STRING_LITERAL
+
+    STRING_LITERAL  shift, and go to state 223
+
+
+state 162
+
+  181 condition: STRING_LITERAL LESSTHAN STRING_LITERAL .
+
+    $default  reduce using rule 181 (condition)
+
+
+state 163
+
+  165 condition: NUMBER EQUAL NUMBER .
+
+    $default  reduce using rule 165 (condition)
+
+
+state 164
+
+  175 condition: NUMBER GREATERTHAN ASSIGN . NUMBER
+
+    NUMBER  shift, and go to state 224
+
+
+state 165
+
+  200 condition: NUMBER GREATERTHAN EQUAL . NUMBER GREATERTHAN EQUAL NUMBER
+  203          | NUMBER GREATERTHAN EQUAL . NUMBER GREATERTHAN NUMBER
+
+    NUMBER  shift, and go to state 225
+
+
+state 166
+
+  173 condition: NUMBER GREATERTHAN NUMBER .
+  201          | NUMBER GREATERTHAN NUMBER . GREATERTHAN NUMBER
+  202          | NUMBER GREATERTHAN NUMBER . GREATERTHAN EQUAL NUMBER
+
+    GREATERTHAN  shift, and go to state 226
+
+    $default  reduce using rule 173 (condition)
+
+
+state 167
+
+  171 condition: NUMBER LESSTHAN ASSIGN . NUMBER
+
+    NUMBER  shift, and go to state 227
+
+
+state 168
+
+  197 condition: NUMBER LESSTHAN EQUAL . NUMBER LESSTHAN EQUAL NUMBER
+  198          | NUMBER LESSTHAN EQUAL . NUMBER LESSTHAN NUMBER
+
+    NUMBER  shift, and go to state 228
+
+
+state 169
+
+  169 condition: NUMBER LESSTHAN NUMBER .
+  196          | NUMBER LESSTHAN NUMBER . LESSTHAN NUMBER
+  199          | NUMBER LESSTHAN NUMBER . LESSTHAN EQUAL NUMBER
+
+    LESSTHAN  shift, and go to state 229
+
+    $default  reduce using rule 169 (condition)
+
+
+state 170
+
+  149 ifcondition: IF LBRACKET condition RBRACKET . COLON ifblock elifstatement
+  150            | IF LBRACKET condition RBRACKET . COLON ifblock elsestatement
+  151            | IF LBRACKET condition RBRACKET . COLON ifblock
+
+    COLON  shift, and go to state 230
+
+
+state 171
+
+  186 condition: TRUE EQUAL TRUE .
+
+    $default  reduce using rule 186 (condition)
+
+
+state 172
+
+  188 condition: TRUE EQUAL FALSE .
+
+    $default  reduce using rule 188 (condition)
+
+
+state 173
+
+  189 condition: FALSE EQUAL TRUE .
+
+    $default  reduce using rule 189 (condition)
+
+
+state 174
+
+  187 condition: FALSE EQUAL FALSE .
+
+    $default  reduce using rule 187 (condition)
+
+
+state 175
+
+  162 ifblock: NEWLINE . INDENTAITON ifstatements DENTAITON
+
+    INDENTAITON  shift, and go to state 231
+
+
+state 176
+
+  152 ifcondition: IF condition COLON ifblock . elifstatement
+  153            | IF condition COLON ifblock . elsestatement
+  154            | IF condition COLON ifblock .
+
+    ELSE  shift, and go to state 232
+    ELIF  shift, and go to state 233
+
+    $default  reduce using rule 154 (ifcondition)
+
+    elifstatement  go to state 234
+    elsestatement  go to state 235
+
+
+state 177
+
+  214 list: IDENTIFIER .
+
+    $default  reduce using rule 214 (list)
+
+
+state 178
+
+  215 list: STRING_LITERAL .
+
+    $default  reduce using rule 215 (list)
+
+
+state 179
+
+  218 range: RANGE . LBRACKET forparams RBRACKET
+
+    LBRACKET  shift, and go to state 236
+
+
+state 180
+
+  212 for_header: FOR IDENTIFIER IN list .
+
+    $default  reduce using rule 212 (for_header)
+
+
+state 181
+
+  216 list: range .
+
+    $default  reduce using rule 216 (list)
+
+
+state 182
+
+  217 list: listrule .
+
+    $default  reduce using rule 217 (list)
+
+
+state 183
+
+  208 whileloop: WHILE LBRACKET condition RBRACKET . COLON whileblock
+
+    COLON  shift, and go to state 237
+
+
+state 184
+
+  210 whileblock: NEWLINE . INDENTAITON whilestatements DENTAITON
+
+    INDENTAITON  shift, and go to state 238
+
+
+state 185
+
+  209 whileloop: WHILE condition COLON whileblock .
+
+    $default  reduce using rule 209 (whileloop)
+
+
+state 186
+
+  242 in: INPUT LBRACKET txtn RBRACKET .
+
+    $default  reduce using rule 242 (in)
+
+
+state 187
+
+  223 try: TRY COLON NEWLINE INDENTAITON . trystatements DENTAITON
+  224    | TRY COLON NEWLINE INDENTAITON . trystatements try_except DENTAITON
+  225    | TRY COLON NEWLINE INDENTAITON . try_except DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 240
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 241
+
+    stm                 go to state 242
+    trystatements       go to state 243
+    simple_stmt_return  go to state 244
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 247
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 251
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 254
+
+
+state 188
+
+  253 inlist: inlist COMMA NEWLINE . arg
+
+    IDENTIFIER      shift, and go to state 48
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    arg  go to state 255
+
+
+state 189
+
+  251 inlist: inlist COMMA arg .
+  252       | inlist COMMA arg . NEWLINE
+
+    NEWLINE  shift, and go to state 256
+
+    $default  reduce using rule 251 (inlist)
+
+
+state 190
+
+  263 import: IMPORT path AS IDENTIFIER .
+
+    $default  reduce using rule 263 (import)
+
+
+state 191
+
+  266 path: path DOT IDENTIFIER .
+
+    $default  reduce using rule 266 (path)
+
+
+state 192
+
+  260 classblock: NEWLINE . INDENTAITON mycode DENTAITON
+
+    INDENTAITON  shift, and go to state 257
+
+
+state 193
+
+  256 class: CLASS IDENTIFIER COLON classblock .
+
+    $default  reduce using rule 256 (class)
+
+
+state 194
+
+  259 classargs: IDENTIFIER .
+
+    $default  reduce using rule 259 (classargs)
+
+
+state 195
+
+  257 class: CLASS IDENTIFIER LBRACKET classargs . RBRACKET COLON classblock
+  258 classargs: classargs . COMMA IDENTIFIER
+
+    RBRACKET  shift, and go to state 258
+    COMMA     shift, and go to state 259
+
+
+state 196
+
+  264 from: FROM IDENTIFIER path IMPORT . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 260
+
+
+state 197
+
+  213 forblock: NEWLINE INDENTAITON . forstatements DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 261
+    IF          shift, and go to state 262
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    BREAK       shift, and go to state 263
+    CONTINUE    shift, and go to state 264
+
+    stm                  go to state 265
+    forstatements        go to state 266
+    simple_stmt_break    go to state 267
+    assignment           go to state 268
+    ifforloops           go to state 269
+    ifconditionforloops  go to state 270
+    whileloop            go to state 248
+    for                  go to state 249
+    for_header           go to state 23
+    tryrule              go to state 250
+    try                  go to state 25
+    try_except           go to state 26
+    output               go to state 252
+    in                   go to state 253
+
+
+state 198
+
+  229 except_name: EXCEPT IDENTIFIER COLON . NEWLINE INDENTAITON trystatements DENTAITON
+
+    NEWLINE  shift, and go to state 271
+
+
+state 199
+
+  230 except_name: EXCEPT IDENTIFIER AS . IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    IDENTIFIER  shift, and go to state 272
+
+
+state 200
+
+  226 except: EXCEPT COLON NEWLINE . INDENTAITON trystatements DENTAITON
+
+    INDENTAITON  shift, and go to state 273
+
+
+state 201
+
+  228 tryelse: ELSE COLON . NEWLINE INDENTAITON trystatements DENTAITON
+
+    NEWLINE  shift, and go to state 274
+
+
+state 202
+
+  227 finally: FINALLY COLON . NEWLINE INDENTAITON trystatements DENTAITON
+
+    NEWLINE  shift, and go to state 275
+
+
+state 203
+
+  237 try_except: try except tryelse finally .
+
+    $default  reduce using rule 237 (try_except)
+
+
+state 204
+
+  239 try_except: try except_name except finally .
+
+    $default  reduce using rule 239 (try_except)
+
+
+state 205
+
+  240 try_except: try except_name tryelse finally .
+
+    $default  reduce using rule 240 (try_except)
+
+
+state 206
+
+  243 txtn: txtn . PLUS txtn
+  243     | txtn PLUS txtn .
+
+    $default  reduce using rule 243 (txtn)
+
+
+state 207
+
+  117 expression: LBRACKET expression RBRACKET .
+
+    $default  reduce using rule 117 (expression)
+
+
+state 208
+
+  112 expression: expression . PLUS expression
+  112           | expression PLUS expression .
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+
+    MUL     shift, and go to state 143
+    DIVIDE  shift, and go to state 144
+
+    $default  reduce using rule 112 (expression)
+
+
+state 209
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  113           | expression MINUS expression .
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+
+    MUL     shift, and go to state 143
+    DIVIDE  shift, and go to state 144
+
+    $default  reduce using rule 113 (expression)
+
+
+state 210
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  114           | expression MUL expression .
+  115           | expression . DIVIDE expression
+
+    $default  reduce using rule 114 (expression)
+
+
+state 211
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  115           | expression DIVIDE expression .
+
+    $default  reduce using rule 115 (expression)
+
+
+state 212
+
+  124 function: DEF IDENTIFIER LBRACKET args RBRACKET . COLON block
+
+    COLON  shift, and go to state 276
+
+
+state 213
+
+  128 args_: args_ COMMA . arg
+
+    IDENTIFIER      shift, and go to state 48
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    arg  go to state 277
+
+
+state 214
+
+  179 condition: IDENTIFIER GREATERTHAN ASSIGN IDENTIFIER .
+
+    $default  reduce using rule 179 (condition)
+
+
+state 215
+
+  174 condition: IDENTIFIER GREATERTHAN ASSIGN NUMBER .
+
+    $default  reduce using rule 174 (condition)
+
+
+state 216
+
+  205 condition: IDENTIFIER GREATERTHAN EQUAL IDENTIFIER . GREATERTHAN EQUAL IDENTIFIER
+  206          | IDENTIFIER GREATERTHAN EQUAL IDENTIFIER . GREATERTHAN IDENTIFIER
+
+    GREATERTHAN  shift, and go to state 278
+
+
+state 217
+
+  204 condition: IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN . IDENTIFIER
+  207          | IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN . EQUAL IDENTIFIER
+
+    EQUAL       shift, and go to state 279
+    IDENTIFIER  shift, and go to state 280
+
+
+state 218
+
+  178 condition: IDENTIFIER LESSTHAN ASSIGN IDENTIFIER .
+
+    $default  reduce using rule 178 (condition)
+
+
+state 219
+
+  170 condition: IDENTIFIER LESSTHAN ASSIGN NUMBER .
+
+    $default  reduce using rule 170 (condition)
+
+
+state 220
+
+  193 condition: IDENTIFIER LESSTHAN EQUAL IDENTIFIER . LESSTHAN EQUAL IDENTIFIER
+  194          | IDENTIFIER LESSTHAN EQUAL IDENTIFIER . LESSTHAN IDENTIFIER
+
+    LESSTHAN  shift, and go to state 281
+
+
+state 221
+
+  192 condition: IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN . IDENTIFIER
+  195          | IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN . EQUAL IDENTIFIER
+
+    EQUAL       shift, and go to state 282
+    IDENTIFIER  shift, and go to state 283
+
+
+state 222
+
+  184 condition: STRING_LITERAL GREATERTHAN ASSIGN STRING_LITERAL .
+
+    $default  reduce using rule 184 (condition)
+
+
+state 223
+
+  183 condition: STRING_LITERAL LESSTHAN ASSIGN STRING_LITERAL .
+
+    $default  reduce using rule 183 (condition)
+
+
+state 224
+
+  175 condition: NUMBER GREATERTHAN ASSIGN NUMBER .
+
+    $default  reduce using rule 175 (condition)
+
+
+state 225
+
+  200 condition: NUMBER GREATERTHAN EQUAL NUMBER . GREATERTHAN EQUAL NUMBER
+  203          | NUMBER GREATERTHAN EQUAL NUMBER . GREATERTHAN NUMBER
+
+    GREATERTHAN  shift, and go to state 284
+
+
+state 226
+
+  201 condition: NUMBER GREATERTHAN NUMBER GREATERTHAN . NUMBER
+  202          | NUMBER GREATERTHAN NUMBER GREATERTHAN . EQUAL NUMBER
+
+    EQUAL   shift, and go to state 285
+    NUMBER  shift, and go to state 286
+
+
+state 227
+
+  171 condition: NUMBER LESSTHAN ASSIGN NUMBER .
+
+    $default  reduce using rule 171 (condition)
+
+
+state 228
+
+  197 condition: NUMBER LESSTHAN EQUAL NUMBER . LESSTHAN EQUAL NUMBER
+  198          | NUMBER LESSTHAN EQUAL NUMBER . LESSTHAN NUMBER
+
+    LESSTHAN  shift, and go to state 287
+
+
+state 229
+
+  196 condition: NUMBER LESSTHAN NUMBER LESSTHAN . NUMBER
+  199          | NUMBER LESSTHAN NUMBER LESSTHAN . EQUAL NUMBER
+
+    EQUAL   shift, and go to state 288
+    NUMBER  shift, and go to state 289
+
+
+state 230
+
+  149 ifcondition: IF LBRACKET condition RBRACKET COLON . ifblock elifstatement
+  150            | IF LBRACKET condition RBRACKET COLON . ifblock elsestatement
+  151            | IF LBRACKET condition RBRACKET COLON . ifblock
+
+    NEWLINE  shift, and go to state 175
+
+    ifblock  go to state 290
+
+
+state 231
+
+  162 ifblock: NEWLINE INDENTAITON . ifstatements DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 291
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 292
+
+    stm           go to state 293
+    ifstatements  go to state 294
+    assignment    go to state 295
+    ifcondition   go to state 296
+    whileloop     go to state 248
+    for           go to state 249
+    for_header    go to state 23
+    tryrule       go to state 250
+    try           go to state 25
+    try_except    go to state 26
+    output        go to state 252
+    in            go to state 253
+    listrule      go to state 297
+
+
+state 232
+
+  161 elsestatement: ELSE . COLON ifblock
+
+    COLON  shift, and go to state 298
+
+
+state 233
+
+  155 elifstatement: ELIF . LBRACKET condition RBRACKET COLON ifblock
+  156              | ELIF . LBRACKET condition RBRACKET COLON ifblock elsestatement
+  157              | ELIF . LBRACKET condition RBRACKET COLON ifblock elifstatement
+  158              | ELIF . condition COLON ifblock
+  159              | ELIF . condition COLON ifblock elsestatement
+  160              | ELIF . condition COLON ifblock elifstatement
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    LBRACKET        shift, and go to state 299
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 300
+
+
+state 234
+
+  152 ifcondition: IF condition COLON ifblock elifstatement .
+
+    $default  reduce using rule 152 (ifcondition)
+
+
+state 235
+
+  153 ifcondition: IF condition COLON ifblock elsestatement .
+
+    $default  reduce using rule 153 (ifcondition)
+
+
+state 236
+
+  218 range: RANGE LBRACKET . forparams RBRACKET
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 301
+    forparams   go to state 302
+
+
+state 237
+
+  208 whileloop: WHILE LBRACKET condition RBRACKET COLON . whileblock
+
+    NEWLINE  shift, and go to state 184
+
+    whileblock  go to state 303
+
+
+state 238
+
+  210 whileblock: NEWLINE INDENTAITON . whilestatements DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 304
+    IF          shift, and go to state 262
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    BREAK       shift, and go to state 263
+    CONTINUE    shift, and go to state 264
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 305
+
+    stm                  go to state 306
+    whilestatements      go to state 307
+    simple_stmt_break    go to state 308
+    assignment           go to state 268
+    ifforloops           go to state 309
+    ifconditionforloops  go to state 270
+    whileloop            go to state 248
+    for                  go to state 249
+    for_header           go to state 23
+    tryrule              go to state 250
+    try                  go to state 25
+    try_except           go to state 26
+    output               go to state 252
+    in                   go to state 253
+    listrule             go to state 310
+
+
+state 239
+
+  106 return_stmt: RETURN . inreturn
+
+    IDENTIFIER      shift, and go to state 48
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    inreturn  go to state 311
+    arg       go to state 312
+
+
+state 240
+
+  100 trystatements: NEWLINE .
+
+    $default  reduce using rule 100 (trystatements)
+
+
+state 241
+
+   96 trystatements: PASS .
+
+    $default  reduce using rule 96 (trystatements)
+
+
+state 242
+
+   92 trystatements: stm .
+
+    $default  reduce using rule 92 (trystatements)
+
+
+state 243
+
+   91 trystatements: trystatements . simple_stmt_return NEWLINE
+   93              | trystatements . stm
+   95              | trystatements . if
+   97              | trystatements . PASS
+   99              | trystatements . listrule NEWLINE
+  223 try: TRY COLON NEWLINE INDENTAITON trystatements . DENTAITON
+  224    | TRY COLON NEWLINE INDENTAITON trystatements . try_except DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 313
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 314
+
+    stm                 go to state 315
+    simple_stmt_return  go to state 316
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 317
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 318
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 319
+
+
+state 244
+
+   90 trystatements: simple_stmt_return . NEWLINE
+
+    NEWLINE  shift, and go to state 320
+
+
+state 245
+
+  102 simple_stmt_return: return_stmt .
+
+    $default  reduce using rule 102 (simple_stmt_return)
+
+
+state 246
+
+  101 simple_stmt_return: assignment .
+
+    $default  reduce using rule 101 (simple_stmt_return)
+
+
+state 247
+
+   94 trystatements: if .
+
+    $default  reduce using rule 94 (trystatements)
+
+
+state 248
+
+   32 stm: whileloop .
+
+    $default  reduce using rule 32 (stm)
+
+
+state 249
+
+   33 stm: for .
+
+    $default  reduce using rule 33 (stm)
+
+
+state 250
+
+   34 stm: tryrule .
+
+    $default  reduce using rule 34 (stm)
+
+
+state 251
+
+  222 tryrule: try_except .
+  225 try: TRY COLON NEWLINE INDENTAITON try_except . DENTAITON
+
+    DENTAITON  shift, and go to state 321
+
+    DENTAITON  [reduce using rule 222 (tryrule)]
+    $default   reduce using rule 222 (tryrule)
+
+
+state 252
+
+   30 stm: output . NEWLINE
+
+    NEWLINE  shift, and go to state 322
+
+
+state 253
+
+   31 stm: in . NEWLINE
+
+    NEWLINE  shift, and go to state 323
+
+
+state 254
+
+   98 trystatements: listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 324
+
+
+state 255
+
+  253 inlist: inlist COMMA NEWLINE arg .
+
+    $default  reduce using rule 253 (inlist)
+
+
+state 256
+
+  252 inlist: inlist COMMA arg NEWLINE .
+
+    $default  reduce using rule 252 (inlist)
+
+
+state 257
+
+  260 classblock: NEWLINE INDENTAITON . mycode DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DEF         shift, and go to state 3
+    NEWLINE     shift, and go to state 4
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 11
+    IMPORT      shift, and go to state 12
+    CLASS       shift, and go to state 13
+    FROM        shift, and go to state 14
+
+    mycode       go to state 325
+    assignment   go to state 17
+    function     go to state 18
+    if           go to state 19
+    ifcondition  go to state 20
+    whileloop    go to state 21
+    for          go to state 22
+    for_header   go to state 23
+    tryrule      go to state 24
+    try          go to state 25
+    try_except   go to state 26
+    output       go to state 27
+    in           go to state 28
+    listrule     go to state 29
+    class        go to state 30
+    import       go to state 31
+    from         go to state 32
+
+
+state 258
+
+  257 class: CLASS IDENTIFIER LBRACKET classargs RBRACKET . COLON classblock
+
+    COLON  shift, and go to state 326
+
+
+state 259
+
+  258 classargs: classargs COMMA . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 327
+
+
+state 260
+
+  264 from: FROM IDENTIFIER path IMPORT IDENTIFIER .
+
+    $default  reduce using rule 264 (from)
+
+
+state 261
+
+   83 forstatements: NEWLINE .
+
+    $default  reduce using rule 83 (forstatements)
+
+
+state 262
+
+  134 ifconditionforloops: IF . LBRACKET condition RBRACKET COLON ifblockforloops elifstatementforloops
+  135                    | IF . LBRACKET condition RBRACKET COLON ifblockforloops elsestatementforloops
+  136                    | IF . LBRACKET condition RBRACKET COLON ifblockforloops
+  137                    | IF . condition COLON ifblockforloops elifstatementforloops
+  138                    | IF . condition COLON ifblockforloops elsestatementforloops
+  139                    | IF . condition COLON ifblockforloops
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    LBRACKET        shift, and go to state 328
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 329
+
+
+state 263
+
+  104 simple_stmt_break: BREAK .
+
+    $default  reduce using rule 104 (simple_stmt_break)
+
+
+state 264
+
+  105 simple_stmt_break: CONTINUE .
+
+    $default  reduce using rule 105 (simple_stmt_break)
+
+
+state 265
+
+   87 forstatements: stm .
+
+    $default  reduce using rule 87 (forstatements)
+
+
+state 266
+
+   82 forstatements: forstatements . simple_stmt_break NEWLINE
+   84              | forstatements . NEWLINE
+   86              | forstatements . stm
+   88              | forstatements . ifforloops
+  213 forblock: NEWLINE INDENTAITON forstatements . DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 330
+    NEWLINE     shift, and go to state 331
+    IF          shift, and go to state 262
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    BREAK       shift, and go to state 263
+    CONTINUE    shift, and go to state 264
+
+    stm                  go to state 332
+    simple_stmt_break    go to state 333
+    assignment           go to state 268
+    ifforloops           go to state 334
+    ifconditionforloops  go to state 270
+    whileloop            go to state 248
+    for                  go to state 249
+    for_header           go to state 23
+    tryrule              go to state 250
+    try                  go to state 25
+    try_except           go to state 26
+    output               go to state 252
+    in                   go to state 253
+
+
+state 267
+
+   85 forstatements: simple_stmt_break . NEWLINE
+
+    NEWLINE  shift, and go to state 335
+
+
+state 268
+
+  103 simple_stmt_break: assignment .
+
+    $default  reduce using rule 103 (simple_stmt_break)
+
+
+state 269
+
+   89 forstatements: ifforloops .
+
+    $default  reduce using rule 89 (forstatements)
+
+
+state 270
+
+  133 ifforloops: ifconditionforloops .
+
+    $default  reduce using rule 133 (ifforloops)
+
+
+state 271
+
+  229 except_name: EXCEPT IDENTIFIER COLON NEWLINE . INDENTAITON trystatements DENTAITON
+
+    INDENTAITON  shift, and go to state 336
+
+
+state 272
+
+  230 except_name: EXCEPT IDENTIFIER AS IDENTIFIER . COLON NEWLINE INDENTAITON trystatements DENTAITON
+
+    COLON  shift, and go to state 337
+
+
+state 273
+
+  226 except: EXCEPT COLON NEWLINE INDENTAITON . trystatements DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 240
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 241
+
+    stm                 go to state 242
+    trystatements       go to state 338
+    simple_stmt_return  go to state 244
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 247
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 254
+
+
+state 274
+
+  228 tryelse: ELSE COLON NEWLINE . INDENTAITON trystatements DENTAITON
+
+    INDENTAITON  shift, and go to state 339
+
+
+state 275
+
+  227 finally: FINALLY COLON NEWLINE . INDENTAITON trystatements DENTAITON
+
+    INDENTAITON  shift, and go to state 340
+
+
+state 276
+
+  124 function: DEF IDENTIFIER LBRACKET args RBRACKET COLON . block
+
+    NEWLINE  shift, and go to state 341
+
+    block  go to state 342
+
+
+state 277
+
+  128 args_: args_ COMMA arg .
+
+    $default  reduce using rule 128 (args_)
+
+
+state 278
+
+  205 condition: IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN . EQUAL IDENTIFIER
+  206          | IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN . IDENTIFIER
+
+    EQUAL       shift, and go to state 343
+    IDENTIFIER  shift, and go to state 344
+
+
+state 279
+
+  207 condition: IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN EQUAL . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 345
+
+
+state 280
+
+  204 condition: IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN IDENTIFIER .
+
+    $default  reduce using rule 204 (condition)
+
+
+state 281
+
+  193 condition: IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN . EQUAL IDENTIFIER
+  194          | IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN . IDENTIFIER
+
+    EQUAL       shift, and go to state 346
+    IDENTIFIER  shift, and go to state 347
+
+
+state 282
+
+  195 condition: IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN EQUAL . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 348
+
+
+state 283
+
+  192 condition: IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN IDENTIFIER .
+
+    $default  reduce using rule 192 (condition)
+
+
+state 284
+
+  200 condition: NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN . EQUAL NUMBER
+  203          | NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN . NUMBER
+
+    EQUAL   shift, and go to state 349
+    NUMBER  shift, and go to state 350
+
+
+state 285
+
+  202 condition: NUMBER GREATERTHAN NUMBER GREATERTHAN EQUAL . NUMBER
+
+    NUMBER  shift, and go to state 351
+
+
+state 286
+
+  201 condition: NUMBER GREATERTHAN NUMBER GREATERTHAN NUMBER .
+
+    $default  reduce using rule 201 (condition)
+
+
+state 287
+
+  197 condition: NUMBER LESSTHAN EQUAL NUMBER LESSTHAN . EQUAL NUMBER
+  198          | NUMBER LESSTHAN EQUAL NUMBER LESSTHAN . NUMBER
+
+    EQUAL   shift, and go to state 352
+    NUMBER  shift, and go to state 353
+
+
+state 288
+
+  199 condition: NUMBER LESSTHAN NUMBER LESSTHAN EQUAL . NUMBER
+
+    NUMBER  shift, and go to state 354
+
+
+state 289
+
+  196 condition: NUMBER LESSTHAN NUMBER LESSTHAN NUMBER .
+
+    $default  reduce using rule 196 (condition)
+
+
+state 290
+
+  149 ifcondition: IF LBRACKET condition RBRACKET COLON ifblock . elifstatement
+  150            | IF LBRACKET condition RBRACKET COLON ifblock . elsestatement
+  151            | IF LBRACKET condition RBRACKET COLON ifblock .
+
+    ELSE  shift, and go to state 232
+    ELIF  shift, and go to state 233
+
+    $default  reduce using rule 151 (ifcondition)
+
+    elifstatement  go to state 355
+    elsestatement  go to state 356
+
+
+state 291
+
+   61 ifstatements: NEWLINE .
+
+    $default  reduce using rule 61 (ifstatements)
+
+
+state 292
+
+   66 ifstatements: PASS .
+
+    $default  reduce using rule 66 (ifstatements)
+
+
+state 293
+
+   65 ifstatements: stm .
+
+    $default  reduce using rule 65 (ifstatements)
+
+
+state 294
+
+   58 ifstatements: ifstatements . assignment NEWLINE
+   60             | ifstatements . ifcondition
+   62             | ifstatements . NEWLINE
+   64             | ifstatements . stm
+   67             | ifstatements . PASS
+   69             | ifstatements . listrule NEWLINE
+  162 ifblock: NEWLINE INDENTAITON ifstatements . DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 357
+    NEWLINE     shift, and go to state 358
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 359
+
+    stm          go to state 360
+    assignment   go to state 361
+    ifcondition  go to state 362
+    whileloop    go to state 248
+    for          go to state 249
+    for_header   go to state 23
+    tryrule      go to state 250
+    try          go to state 25
+    try_except   go to state 26
+    output       go to state 252
+    in           go to state 253
+    listrule     go to state 363
+
+
+state 295
+
+   63 ifstatements: assignment . NEWLINE
+
+    NEWLINE  shift, and go to state 364
+
+
+state 296
+
+   59 ifstatements: ifcondition .
+
+    $default  reduce using rule 59 (ifstatements)
+
+
+state 297
+
+   68 ifstatements: listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 365
+
+
+state 298
+
+  161 elsestatement: ELSE COLON . ifblock
+
+    NEWLINE  shift, and go to state 175
+
+    ifblock  go to state 366
+
+
+state 299
+
+  155 elifstatement: ELIF LBRACKET . condition RBRACKET COLON ifblock
+  156              | ELIF LBRACKET . condition RBRACKET COLON ifblock elsestatement
+  157              | ELIF LBRACKET . condition RBRACKET COLON ifblock elifstatement
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 367
+
+
+state 300
+
+  158 elifstatement: ELIF condition . COLON ifblock
+  159              | ELIF condition . COLON ifblock elsestatement
+  160              | ELIF condition . COLON ifblock elifstatement
+
+    COLON  shift, and go to state 368
+
+
+state 301
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  219 forparams: expression . COMMA expression COMMA expression
+  220          | expression . COMMA expression
+  221          | expression .
+
+    PLUS    shift, and go to state 141
+    MINUS   shift, and go to state 142
+    MUL     shift, and go to state 143
+    DIVIDE  shift, and go to state 144
+    COMMA   shift, and go to state 369
+
+    $default  reduce using rule 221 (forparams)
+
+
+state 302
+
+  218 range: RANGE LBRACKET forparams . RBRACKET
+
+    RBRACKET  shift, and go to state 370
+
+
+state 303
+
+  208 whileloop: WHILE LBRACKET condition RBRACKET COLON whileblock .
+
+    $default  reduce using rule 208 (whileloop)
+
+
+state 304
+
+   72 whilestatements: NEWLINE .
+
+    $default  reduce using rule 72 (whilestatements)
+
+
+state 305
+
+   78 whilestatements: PASS .
+
+    $default  reduce using rule 78 (whilestatements)
+
+
+state 306
+
+   73 whilestatements: stm .
+
+    $default  reduce using rule 73 (whilestatements)
+
+
+state 307
+
+   70 whilestatements: whilestatements . simple_stmt_break NEWLINE
+   74                | whilestatements . stm
+   75                | whilestatements . NEWLINE
+   76                | whilestatements . ifforloops
+   79                | whilestatements . PASS
+   81                | whilestatements . listrule NEWLINE
+  210 whileblock: NEWLINE INDENTAITON whilestatements . DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 371
+    NEWLINE     shift, and go to state 372
+    IF          shift, and go to state 262
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    BREAK       shift, and go to state 263
+    CONTINUE    shift, and go to state 264
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 373
+
+    stm                  go to state 374
+    simple_stmt_break    go to state 375
+    assignment           go to state 268
+    ifforloops           go to state 376
+    ifconditionforloops  go to state 270
+    whileloop            go to state 248
+    for                  go to state 249
+    for_header           go to state 23
+    tryrule              go to state 250
+    try                  go to state 25
+    try_except           go to state 26
+    output               go to state 252
+    in                   go to state 253
+    listrule             go to state 377
+
+
+state 308
+
+   71 whilestatements: simple_stmt_break . NEWLINE
+
+    NEWLINE  shift, and go to state 378
+
+
+state 309
+
+   77 whilestatements: ifforloops .
+
+    $default  reduce using rule 77 (whilestatements)
+
+
+state 310
+
+   80 whilestatements: listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 379
+
+
+state 311
+
+  106 return_stmt: RETURN inreturn .
+  107 inreturn: inreturn . COMMA arg
+
+    COMMA  shift, and go to state 380
+
+    $default  reduce using rule 106 (return_stmt)
+
+
+state 312
+
+  108 inreturn: arg .
+
+    $default  reduce using rule 108 (inreturn)
+
+
+state 313
+
+  223 try: TRY COLON NEWLINE INDENTAITON trystatements DENTAITON .
+
+    $default  reduce using rule 223 (try)
+
+
+state 314
+
+   97 trystatements: trystatements PASS .
+
+    $default  reduce using rule 97 (trystatements)
+
+
+state 315
+
+   93 trystatements: trystatements stm .
+
+    $default  reduce using rule 93 (trystatements)
+
+
+state 316
+
+   91 trystatements: trystatements simple_stmt_return . NEWLINE
+
+    NEWLINE  shift, and go to state 381
+
+
+state 317
+
+   95 trystatements: trystatements if .
+
+    $default  reduce using rule 95 (trystatements)
+
+
+state 318
+
+  222 tryrule: try_except .
+  224 try: TRY COLON NEWLINE INDENTAITON trystatements try_except . DENTAITON
+
+    DENTAITON  shift, and go to state 382
+
+    DENTAITON  [reduce using rule 222 (tryrule)]
+    $default   reduce using rule 222 (tryrule)
+
+
+state 319
+
+   99 trystatements: trystatements listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 383
+
+
+state 320
+
+   90 trystatements: simple_stmt_return NEWLINE .
+
+    $default  reduce using rule 90 (trystatements)
+
+
+state 321
+
+  225 try: TRY COLON NEWLINE INDENTAITON try_except DENTAITON .
+
+    $default  reduce using rule 225 (try)
+
+
+state 322
+
+   30 stm: output NEWLINE .
+
+    $default  reduce using rule 30 (stm)
+
+
+state 323
+
+   31 stm: in NEWLINE .
+
+    $default  reduce using rule 31 (stm)
+
+
+state 324
+
+   98 trystatements: listrule NEWLINE .
+
+    $default  reduce using rule 98 (trystatements)
+
+
+state 325
+
+    2 mycode: mycode . in
+    3       | mycode . output
+    4       | mycode . function
+    5       | mycode . whileloop
+    6       | mycode . if
+    7       | mycode . tryrule
+    8       | mycode . for
+    9       | mycode . assignment
+   10       | mycode . listrule
+   11       | mycode . NEWLINE
+   12       | mycode . PASS
+   13       | mycode . import
+   14       | mycode . from
+   15       | mycode . class
+  260 classblock: NEWLINE INDENTAITON mycode . DENTAITON
+
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DEF         shift, and go to state 3
+    DENTAITON   shift, and go to state 384
+    NEWLINE     shift, and go to state 60
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 61
+    IMPORT      shift, and go to state 12
+    CLASS       shift, and go to state 13
+    FROM        shift, and go to state 14
+
+    assignment   go to state 62
+    function     go to state 63
+    if           go to state 64
+    ifcondition  go to state 20
+    whileloop    go to state 65
+    for          go to state 66
+    for_header   go to state 23
+    tryrule      go to state 67
+    try          go to state 25
+    try_except   go to state 26
+    output       go to state 68
+    in           go to state 69
+    listrule     go to state 70
+    class        go to state 71
+    import       go to state 72
+    from         go to state 73
+
+
+state 326
+
+  257 class: CLASS IDENTIFIER LBRACKET classargs RBRACKET COLON . classblock
+
+    NEWLINE  shift, and go to state 192
+
+    classblock  go to state 385
+
+
+state 327
+
+  258 classargs: classargs COMMA IDENTIFIER .
+
+    $default  reduce using rule 258 (classargs)
+
+
+state 328
+
+  134 ifconditionforloops: IF LBRACKET . condition RBRACKET COLON ifblockforloops elifstatementforloops
+  135                    | IF LBRACKET . condition RBRACKET COLON ifblockforloops elsestatementforloops
+  136                    | IF LBRACKET . condition RBRACKET COLON ifblockforloops
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 386
+
+
+state 329
+
+  137 ifconditionforloops: IF condition . COLON ifblockforloops elifstatementforloops
+  138                    | IF condition . COLON ifblockforloops elsestatementforloops
+  139                    | IF condition . COLON ifblockforloops
+
+    COLON  shift, and go to state 387
+
+
+state 330
+
+  213 forblock: NEWLINE INDENTAITON forstatements DENTAITON .
+
+    $default  reduce using rule 213 (forblock)
+
+
+state 331
+
+   84 forstatements: forstatements NEWLINE .
+
+    $default  reduce using rule 84 (forstatements)
+
+
+state 332
+
+   86 forstatements: forstatements stm .
+
+    $default  reduce using rule 86 (forstatements)
+
+
+state 333
+
+   82 forstatements: forstatements simple_stmt_break . NEWLINE
+
+    NEWLINE  shift, and go to state 388
+
+
+state 334
+
+   88 forstatements: forstatements ifforloops .
+
+    $default  reduce using rule 88 (forstatements)
+
+
+state 335
+
+   85 forstatements: simple_stmt_break NEWLINE .
+
+    $default  reduce using rule 85 (forstatements)
+
+
+state 336
+
+  229 except_name: EXCEPT IDENTIFIER COLON NEWLINE INDENTAITON . trystatements DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 240
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 241
+
+    stm                 go to state 242
+    trystatements       go to state 389
+    simple_stmt_return  go to state 244
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 247
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 254
+
+
+state 337
+
+  230 except_name: EXCEPT IDENTIFIER AS IDENTIFIER COLON . NEWLINE INDENTAITON trystatements DENTAITON
+
+    NEWLINE  shift, and go to state 390
+
+
+state 338
+
+   91 trystatements: trystatements . simple_stmt_return NEWLINE
+   93              | trystatements . stm
+   95              | trystatements . if
+   97              | trystatements . PASS
+   99              | trystatements . listrule NEWLINE
+  226 except: EXCEPT COLON NEWLINE INDENTAITON trystatements . DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 391
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 314
+
+    stm                 go to state 315
+    simple_stmt_return  go to state 316
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 317
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 319
+
+
+state 339
+
+  228 tryelse: ELSE COLON NEWLINE INDENTAITON . trystatements DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 240
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 241
+
+    stm                 go to state 242
+    trystatements       go to state 392
+    simple_stmt_return  go to state 244
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 247
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 254
+
+
+state 340
+
+  227 finally: FINALLY COLON NEWLINE INDENTAITON . trystatements DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 240
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 241
+
+    stm                 go to state 242
+    trystatements       go to state 393
+    simple_stmt_return  go to state 244
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 247
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 254
+
+
+state 341
+
+  132 block: NEWLINE . INDENTAITON statements DENTAITON
+
+    INDENTAITON  shift, and go to state 394
+
+
+state 342
+
+  124 function: DEF IDENTIFIER LBRACKET args RBRACKET COLON block .
+
+    $default  reduce using rule 124 (function)
+
+
+state 343
+
+  205 condition: IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN EQUAL . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 395
+
+
+state 344
+
+  206 condition: IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN IDENTIFIER .
+
+    $default  reduce using rule 206 (condition)
+
+
+state 345
+
+  207 condition: IDENTIFIER GREATERTHAN IDENTIFIER GREATERTHAN EQUAL IDENTIFIER .
+
+    $default  reduce using rule 207 (condition)
+
+
+state 346
+
+  193 condition: IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN EQUAL . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 396
+
+
+state 347
+
+  194 condition: IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN IDENTIFIER .
+
+    $default  reduce using rule 194 (condition)
+
+
+state 348
+
+  195 condition: IDENTIFIER LESSTHAN IDENTIFIER LESSTHAN EQUAL IDENTIFIER .
+
+    $default  reduce using rule 195 (condition)
+
+
+state 349
+
+  200 condition: NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN EQUAL . NUMBER
+
+    NUMBER  shift, and go to state 397
+
+
+state 350
+
+  203 condition: NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN NUMBER .
+
+    $default  reduce using rule 203 (condition)
+
+
+state 351
+
+  202 condition: NUMBER GREATERTHAN NUMBER GREATERTHAN EQUAL NUMBER .
+
+    $default  reduce using rule 202 (condition)
+
+
+state 352
+
+  197 condition: NUMBER LESSTHAN EQUAL NUMBER LESSTHAN EQUAL . NUMBER
+
+    NUMBER  shift, and go to state 398
+
+
+state 353
+
+  198 condition: NUMBER LESSTHAN EQUAL NUMBER LESSTHAN NUMBER .
+
+    $default  reduce using rule 198 (condition)
+
+
+state 354
+
+  199 condition: NUMBER LESSTHAN NUMBER LESSTHAN EQUAL NUMBER .
+
+    $default  reduce using rule 199 (condition)
+
+
+state 355
+
+  149 ifcondition: IF LBRACKET condition RBRACKET COLON ifblock elifstatement .
+
+    $default  reduce using rule 149 (ifcondition)
+
+
+state 356
+
+  150 ifcondition: IF LBRACKET condition RBRACKET COLON ifblock elsestatement .
+
+    $default  reduce using rule 150 (ifcondition)
+
+
+state 357
+
+  162 ifblock: NEWLINE INDENTAITON ifstatements DENTAITON .
+
+    $default  reduce using rule 162 (ifblock)
+
+
+state 358
+
+   62 ifstatements: ifstatements NEWLINE .
+
+    $default  reduce using rule 62 (ifstatements)
+
+
+state 359
+
+   67 ifstatements: ifstatements PASS .
+
+    $default  reduce using rule 67 (ifstatements)
+
+
+state 360
+
+   64 ifstatements: ifstatements stm .
+
+    $default  reduce using rule 64 (ifstatements)
+
+
+state 361
+
+   58 ifstatements: ifstatements assignment . NEWLINE
+
+    NEWLINE  shift, and go to state 399
+
+
+state 362
+
+   60 ifstatements: ifstatements ifcondition .
+
+    $default  reduce using rule 60 (ifstatements)
+
+
+state 363
+
+   69 ifstatements: ifstatements listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 400
+
+
+state 364
+
+   63 ifstatements: assignment NEWLINE .
+
+    $default  reduce using rule 63 (ifstatements)
+
+
+state 365
+
+   68 ifstatements: listrule NEWLINE .
+
+    $default  reduce using rule 68 (ifstatements)
+
+
+state 366
+
+  161 elsestatement: ELSE COLON ifblock .
+
+    $default  reduce using rule 161 (elsestatement)
+
+
+state 367
+
+  155 elifstatement: ELIF LBRACKET condition . RBRACKET COLON ifblock
+  156              | ELIF LBRACKET condition . RBRACKET COLON ifblock elsestatement
+  157              | ELIF LBRACKET condition . RBRACKET COLON ifblock elifstatement
+
+    RBRACKET  shift, and go to state 401
+
+
+state 368
+
+  158 elifstatement: ELIF condition COLON . ifblock
+  159              | ELIF condition COLON . ifblock elsestatement
+  160              | ELIF condition COLON . ifblock elifstatement
+
+    NEWLINE  shift, and go to state 175
+
+    ifblock  go to state 402
+
+
+state 369
+
+  219 forparams: expression COMMA . expression COMMA expression
+  220          | expression COMMA . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 403
+
+
+state 370
+
+  218 range: RANGE LBRACKET forparams RBRACKET .
+
+    $default  reduce using rule 218 (range)
+
+
+state 371
+
+  210 whileblock: NEWLINE INDENTAITON whilestatements DENTAITON .
+
+    $default  reduce using rule 210 (whileblock)
+
+
+state 372
+
+   75 whilestatements: whilestatements NEWLINE .
+
+    $default  reduce using rule 75 (whilestatements)
+
+
+state 373
+
+   79 whilestatements: whilestatements PASS .
+
+    $default  reduce using rule 79 (whilestatements)
+
+
+state 374
+
+   74 whilestatements: whilestatements stm .
+
+    $default  reduce using rule 74 (whilestatements)
+
+
+state 375
+
+   70 whilestatements: whilestatements simple_stmt_break . NEWLINE
+
+    NEWLINE  shift, and go to state 404
+
+
+state 376
+
+   76 whilestatements: whilestatements ifforloops .
+
+    $default  reduce using rule 76 (whilestatements)
+
+
+state 377
+
+   81 whilestatements: whilestatements listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 405
+
+
+state 378
+
+   71 whilestatements: simple_stmt_break NEWLINE .
+
+    $default  reduce using rule 71 (whilestatements)
+
+
+state 379
+
+   80 whilestatements: listrule NEWLINE .
+
+    $default  reduce using rule 80 (whilestatements)
+
+
+state 380
+
+  107 inreturn: inreturn COMMA . arg
+
+    IDENTIFIER      shift, and go to state 48
+    STRING_LITERAL  shift, and go to state 50
+    NUMBER          shift, and go to state 51
+
+    arg  go to state 406
+
+
+state 381
+
+   91 trystatements: trystatements simple_stmt_return NEWLINE .
+
+    $default  reduce using rule 91 (trystatements)
+
+
+state 382
+
+  224 try: TRY COLON NEWLINE INDENTAITON trystatements try_except DENTAITON .
+
+    $default  reduce using rule 224 (try)
+
+
+state 383
+
+   99 trystatements: trystatements listrule NEWLINE .
+
+    $default  reduce using rule 99 (trystatements)
+
+
+state 384
+
+  260 classblock: NEWLINE INDENTAITON mycode DENTAITON .
+
+    $default  reduce using rule 260 (classblock)
+
+
+state 385
+
+  257 class: CLASS IDENTIFIER LBRACKET classargs RBRACKET COLON classblock .
+
+    $default  reduce using rule 257 (class)
+
+
+state 386
+
+  134 ifconditionforloops: IF LBRACKET condition . RBRACKET COLON ifblockforloops elifstatementforloops
+  135                    | IF LBRACKET condition . RBRACKET COLON ifblockforloops elsestatementforloops
+  136                    | IF LBRACKET condition . RBRACKET COLON ifblockforloops
+
+    RBRACKET  shift, and go to state 407
+
+
+state 387
+
+  137 ifconditionforloops: IF condition COLON . ifblockforloops elifstatementforloops
+  138                    | IF condition COLON . ifblockforloops elsestatementforloops
+  139                    | IF condition COLON . ifblockforloops
+
+    NEWLINE  shift, and go to state 408
+
+    ifblockforloops  go to state 409
+
+
+state 388
+
+   82 forstatements: forstatements simple_stmt_break NEWLINE .
+
+    $default  reduce using rule 82 (forstatements)
+
+
+state 389
+
+   91 trystatements: trystatements . simple_stmt_return NEWLINE
+   93              | trystatements . stm
+   95              | trystatements . if
+   97              | trystatements . PASS
+   99              | trystatements . listrule NEWLINE
+  229 except_name: EXCEPT IDENTIFIER COLON NEWLINE INDENTAITON trystatements . DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 410
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 314
+
+    stm                 go to state 315
+    simple_stmt_return  go to state 316
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 317
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 319
+
+
+state 390
+
+  230 except_name: EXCEPT IDENTIFIER AS IDENTIFIER COLON NEWLINE . INDENTAITON trystatements DENTAITON
+
+    INDENTAITON  shift, and go to state 411
+
+
+state 391
+
+  226 except: EXCEPT COLON NEWLINE INDENTAITON trystatements DENTAITON .
+
+    $default  reduce using rule 226 (except)
+
+
+state 392
+
+   91 trystatements: trystatements . simple_stmt_return NEWLINE
+   93              | trystatements . stm
+   95              | trystatements . if
+   97              | trystatements . PASS
+   99              | trystatements . listrule NEWLINE
+  228 tryelse: ELSE COLON NEWLINE INDENTAITON trystatements . DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 412
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 314
+
+    stm                 go to state 315
+    simple_stmt_return  go to state 316
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 317
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 319
+
+
+state 393
+
+   91 trystatements: trystatements . simple_stmt_return NEWLINE
+   93              | trystatements . stm
+   95              | trystatements . if
+   97              | trystatements . PASS
+   99              | trystatements . listrule NEWLINE
+  227 finally: FINALLY COLON NEWLINE INDENTAITON trystatements . DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 413
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 314
+
+    stm                 go to state 315
+    simple_stmt_return  go to state 316
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 317
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 319
+
+
+state 394
+
+  132 block: NEWLINE INDENTAITON . statements DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 414
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 415
+
+    stm                 go to state 416
+    statements          go to state 417
+    simple_stmt_return  go to state 418
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 419
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 420
+
+
+state 395
+
+  205 condition: IDENTIFIER GREATERTHAN EQUAL IDENTIFIER GREATERTHAN EQUAL IDENTIFIER .
+
+    $default  reduce using rule 205 (condition)
+
+
+state 396
+
+  193 condition: IDENTIFIER LESSTHAN EQUAL IDENTIFIER LESSTHAN EQUAL IDENTIFIER .
+
+    $default  reduce using rule 193 (condition)
+
+
+state 397
+
+  200 condition: NUMBER GREATERTHAN EQUAL NUMBER GREATERTHAN EQUAL NUMBER .
+
+    $default  reduce using rule 200 (condition)
+
+
+state 398
+
+  197 condition: NUMBER LESSTHAN EQUAL NUMBER LESSTHAN EQUAL NUMBER .
+
+    $default  reduce using rule 197 (condition)
+
+
+state 399
+
+   58 ifstatements: ifstatements assignment NEWLINE .
+
+    $default  reduce using rule 58 (ifstatements)
+
+
+state 400
+
+   69 ifstatements: ifstatements listrule NEWLINE .
+
+    $default  reduce using rule 69 (ifstatements)
+
+
+state 401
+
+  155 elifstatement: ELIF LBRACKET condition RBRACKET . COLON ifblock
+  156              | ELIF LBRACKET condition RBRACKET . COLON ifblock elsestatement
+  157              | ELIF LBRACKET condition RBRACKET . COLON ifblock elifstatement
+
+    COLON  shift, and go to state 421
+
+
+state 402
+
+  158 elifstatement: ELIF condition COLON ifblock .
+  159              | ELIF condition COLON ifblock . elsestatement
+  160              | ELIF condition COLON ifblock . elifstatement
+
+    ELSE  shift, and go to state 232
+    ELIF  shift, and go to state 233
+
+    $default  reduce using rule 158 (elifstatement)
+
+    elifstatement  go to state 422
+    elsestatement  go to state 423
+
+
+state 403
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  219 forparams: expression COMMA expression . COMMA expression
+  220          | expression COMMA expression .
+
+    PLUS    shift, and go to state 141
+    MINUS   shift, and go to state 142
+    MUL     shift, and go to state 143
+    DIVIDE  shift, and go to state 144
+    COMMA   shift, and go to state 424
+
+    $default  reduce using rule 220 (forparams)
+
+
+state 404
+
+   70 whilestatements: whilestatements simple_stmt_break NEWLINE .
+
+    $default  reduce using rule 70 (whilestatements)
+
+
+state 405
+
+   81 whilestatements: whilestatements listrule NEWLINE .
+
+    $default  reduce using rule 81 (whilestatements)
+
+
+state 406
+
+  107 inreturn: inreturn COMMA arg .
+
+    $default  reduce using rule 107 (inreturn)
+
+
+state 407
+
+  134 ifconditionforloops: IF LBRACKET condition RBRACKET . COLON ifblockforloops elifstatementforloops
+  135                    | IF LBRACKET condition RBRACKET . COLON ifblockforloops elsestatementforloops
+  136                    | IF LBRACKET condition RBRACKET . COLON ifblockforloops
+
+    COLON  shift, and go to state 425
+
+
+state 408
+
+  147 ifblockforloops: NEWLINE . INDENTAITON ifstatementsforloops DENTAITON
+
+    INDENTAITON  shift, and go to state 426
+
+
+state 409
+
+  137 ifconditionforloops: IF condition COLON ifblockforloops . elifstatementforloops
+  138                    | IF condition COLON ifblockforloops . elsestatementforloops
+  139                    | IF condition COLON ifblockforloops .
+
+    ELSE  shift, and go to state 427
+    ELIF  shift, and go to state 428
+
+    $default  reduce using rule 139 (ifconditionforloops)
+
+    elifstatementforloops  go to state 429
+    elsestatementforloops  go to state 430
+
+
+state 410
+
+  229 except_name: EXCEPT IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON .
+
+    $default  reduce using rule 229 (except_name)
+
+
+state 411
+
+  230 except_name: EXCEPT IDENTIFIER AS IDENTIFIER COLON NEWLINE INDENTAITON . trystatements DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    NEWLINE     shift, and go to state 240
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 241
+
+    stm                 go to state 242
+    trystatements       go to state 431
+    simple_stmt_return  go to state 244
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 247
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 254
+
+
+state 412
+
+  228 tryelse: ELSE COLON NEWLINE INDENTAITON trystatements DENTAITON .
+
+    $default  reduce using rule 228 (tryelse)
+
+
+state 413
+
+  227 finally: FINALLY COLON NEWLINE INDENTAITON trystatements DENTAITON .
+
+    $default  reduce using rule 227 (finally)
+
+
+state 414
+
+   45 statements: NEWLINE .
+
+    $default  reduce using rule 45 (statements)
+
+
+state 415
+
+   41 statements: PASS .
+
+    $default  reduce using rule 41 (statements)
+
+
+state 416
+
+   37 statements: stm .
+
+    $default  reduce using rule 37 (statements)
+
+
+state 417
+
+   36 statements: statements . simple_stmt_return NEWLINE
+   38           | statements . stm
+   40           | statements . if
+   42           | statements . PASS
+   44           | statements . listrule NEWLINE
+  132 block: NEWLINE INDENTAITON statements . DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 432
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 433
+
+    stm                 go to state 434
+    simple_stmt_return  go to state 435
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 436
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 437
+
+
+state 418
+
+   35 statements: simple_stmt_return . NEWLINE
+
+    NEWLINE  shift, and go to state 438
+
+
+state 419
+
+   39 statements: if .
+
+    $default  reduce using rule 39 (statements)
+
+
+state 420
+
+   43 statements: listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 439
+
+
+state 421
+
+  155 elifstatement: ELIF LBRACKET condition RBRACKET COLON . ifblock
+  156              | ELIF LBRACKET condition RBRACKET COLON . ifblock elsestatement
+  157              | ELIF LBRACKET condition RBRACKET COLON . ifblock elifstatement
+
+    NEWLINE  shift, and go to state 175
+
+    ifblock  go to state 440
+
+
+state 422
+
+  160 elifstatement: ELIF condition COLON ifblock elifstatement .
+
+    $default  reduce using rule 160 (elifstatement)
+
+
+state 423
+
+  159 elifstatement: ELIF condition COLON ifblock elsestatement .
+
+    $default  reduce using rule 159 (elifstatement)
+
+
+state 424
+
+  219 forparams: expression COMMA expression COMMA . expression
+
+    MINUS           shift, and go to state 84
+    IDENTIFIER      shift, and go to state 85
+    STRING_LITERAL  shift, and go to state 86
+    NUMBER          shift, and go to state 87
+    LBRACKET        shift, and go to state 88
+    TRUE            shift, and go to state 89
+    FALSE           shift, and go to state 90
+    '|'             shift, and go to state 91
+
+    expression  go to state 441
+
+
+state 425
+
+  134 ifconditionforloops: IF LBRACKET condition RBRACKET COLON . ifblockforloops elifstatementforloops
+  135                    | IF LBRACKET condition RBRACKET COLON . ifblockforloops elsestatementforloops
+  136                    | IF LBRACKET condition RBRACKET COLON . ifblockforloops
+
+    NEWLINE  shift, and go to state 408
+
+    ifblockforloops  go to state 442
+
+
+state 426
+
+  147 ifblockforloops: NEWLINE INDENTAITON . ifstatementsforloops DENTAITON
+
+    PRINT           shift, and go to state 1
+    IDENTIFIER      shift, and go to state 443
+    NEWLINE         shift, and go to state 444
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    FOR             shift, and go to state 6
+    WHILE           shift, and go to state 7
+    INPUT           shift, and go to state 8
+    TRY             shift, and go to state 9
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+    BREAK           shift, and go to state 263
+    CONTINUE        shift, and go to state 264
+    SQUAREBL        shift, and go to state 10
+    PASS            shift, and go to state 445
+
+    stm                   go to state 446
+    ifstatementsforloops  go to state 447
+    simple_stmt_break     go to state 448
+    assignment            go to state 268
+    condition             go to state 449
+    whileloop             go to state 248
+    for                   go to state 249
+    for_header            go to state 23
+    tryrule               go to state 250
+    try                   go to state 25
+    try_except            go to state 26
+    output                go to state 252
+    in                    go to state 253
+    listrule              go to state 450
+
+
+state 427
+
+  146 elsestatementforloops: ELSE . COLON ifblockforloops
+
+    COLON  shift, and go to state 451
+
+
+state 428
+
+  140 elifstatementforloops: ELIF . LBRACKET condition RBRACKET COLON ifblockforloops
+  141                      | ELIF . LBRACKET condition RBRACKET COLON ifblockforloops elsestatementforloops
+  142                      | ELIF . LBRACKET condition RBRACKET COLON ifblockforloops elifstatementforloops
+  143                      | ELIF . condition COLON ifblockforloops
+  144                      | ELIF . condition COLON ifblockforloops elsestatementforloops
+  145                      | ELIF . condition COLON ifblockforloops elifstatementforloops
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    LBRACKET        shift, and go to state 452
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 453
+
+
+state 429
+
+  137 ifconditionforloops: IF condition COLON ifblockforloops elifstatementforloops .
+
+    $default  reduce using rule 137 (ifconditionforloops)
+
+
+state 430
+
+  138 ifconditionforloops: IF condition COLON ifblockforloops elsestatementforloops .
+
+    $default  reduce using rule 138 (ifconditionforloops)
+
+
+state 431
+
+   91 trystatements: trystatements . simple_stmt_return NEWLINE
+   93              | trystatements . stm
+   95              | trystatements . if
+   97              | trystatements . PASS
+   99              | trystatements . listrule NEWLINE
+  230 except_name: EXCEPT IDENTIFIER AS IDENTIFIER COLON NEWLINE INDENTAITON trystatements . DENTAITON
+
+    RETURN      shift, and go to state 239
+    PRINT       shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    DENTAITON   shift, and go to state 454
+    IF          shift, and go to state 5
+    FOR         shift, and go to state 6
+    WHILE       shift, and go to state 7
+    INPUT       shift, and go to state 8
+    TRY         shift, and go to state 9
+    SQUAREBL    shift, and go to state 10
+    PASS        shift, and go to state 314
+
+    stm                 go to state 315
+    simple_stmt_return  go to state 316
+    return_stmt         go to state 245
+    assignment          go to state 246
+    if                  go to state 317
+    ifcondition         go to state 20
+    whileloop           go to state 248
+    for                 go to state 249
+    for_header          go to state 23
+    tryrule             go to state 250
+    try                 go to state 25
+    try_except          go to state 26
+    output              go to state 252
+    in                  go to state 253
+    listrule            go to state 319
+
+
+state 432
+
+  132 block: NEWLINE INDENTAITON statements DENTAITON .
+
+    $default  reduce using rule 132 (block)
+
+
+state 433
+
+   42 statements: statements PASS .
+
+    $default  reduce using rule 42 (statements)
+
+
+state 434
+
+   38 statements: statements stm .
+
+    $default  reduce using rule 38 (statements)
+
+
+state 435
+
+   36 statements: statements simple_stmt_return . NEWLINE
+
+    NEWLINE  shift, and go to state 455
+
+
+state 436
+
+   40 statements: statements if .
+
+    $default  reduce using rule 40 (statements)
+
+
+state 437
+
+   44 statements: statements listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 456
+
+
+state 438
+
+   35 statements: simple_stmt_return NEWLINE .
+
+    $default  reduce using rule 35 (statements)
+
+
+state 439
+
+   43 statements: listrule NEWLINE .
+
+    $default  reduce using rule 43 (statements)
+
+
+state 440
+
+  155 elifstatement: ELIF LBRACKET condition RBRACKET COLON ifblock .
+  156              | ELIF LBRACKET condition RBRACKET COLON ifblock . elsestatement
+  157              | ELIF LBRACKET condition RBRACKET COLON ifblock . elifstatement
+
+    ELSE  shift, and go to state 232
+    ELIF  shift, and go to state 233
+
+    $default  reduce using rule 155 (elifstatement)
+
+    elifstatement  go to state 457
+    elsestatement  go to state 458
+
+
+state 441
+
+  112 expression: expression . PLUS expression
+  113           | expression . MINUS expression
+  114           | expression . MUL expression
+  115           | expression . DIVIDE expression
+  219 forparams: expression COMMA expression COMMA expression .
+
+    PLUS    shift, and go to state 141
+    MINUS   shift, and go to state 142
+    MUL     shift, and go to state 143
+    DIVIDE  shift, and go to state 144
+
+    $default  reduce using rule 219 (forparams)
+
+
+state 442
+
+  134 ifconditionforloops: IF LBRACKET condition RBRACKET COLON ifblockforloops . elifstatementforloops
+  135                    | IF LBRACKET condition RBRACKET COLON ifblockforloops . elsestatementforloops
+  136                    | IF LBRACKET condition RBRACKET COLON ifblockforloops .
+
+    ELSE  shift, and go to state 427
+    ELIF  shift, and go to state 428
+
+    $default  reduce using rule 136 (ifconditionforloops)
+
+    elifstatementforloops  go to state 459
+    elsestatementforloops  go to state 460
+
+
+state 443
+
+  109 assignment: IDENTIFIER . ASSIGN expression
+  110           | IDENTIFIER . ASSIGN in
+  111           | IDENTIFIER . ASSIGN listrule
+  163 condition: IDENTIFIER . EQUAL IDENTIFIER
+  164          | IDENTIFIER . EQUAL NUMBER
+  166          | IDENTIFIER .
+  168          | IDENTIFIER . LESSTHAN NUMBER
+  170          | IDENTIFIER . LESSTHAN ASSIGN NUMBER
+  172          | IDENTIFIER . GREATERTHAN NUMBER
+  174          | IDENTIFIER . GREATERTHAN ASSIGN NUMBER
+  176          | IDENTIFIER . LESSTHAN IDENTIFIER
+  177          | IDENTIFIER . GREATERTHAN IDENTIFIER
+  178          | IDENTIFIER . LESSTHAN ASSIGN IDENTIFIER
+  179          | IDENTIFIER . GREATERTHAN ASSIGN IDENTIFIER
+  192          | IDENTIFIER . LESSTHAN IDENTIFIER LESSTHAN IDENTIFIER
+  193          | IDENTIFIER . LESSTHAN EQUAL IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  194          | IDENTIFIER . LESSTHAN EQUAL IDENTIFIER LESSTHAN IDENTIFIER
+  195          | IDENTIFIER . LESSTHAN IDENTIFIER LESSTHAN EQUAL IDENTIFIER
+  204          | IDENTIFIER . GREATERTHAN IDENTIFIER GREATERTHAN IDENTIFIER
+  205          | IDENTIFIER . GREATERTHAN EQUAL IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+  206          | IDENTIFIER . GREATERTHAN EQUAL IDENTIFIER GREATERTHAN IDENTIFIER
+  207          | IDENTIFIER . GREATERTHAN IDENTIFIER GREATERTHAN EQUAL IDENTIFIER
+
+    ASSIGN       shift, and go to state 34
+    EQUAL        shift, and go to state 96
+    GREATERTHAN  shift, and go to state 97
+    LESSTHAN     shift, and go to state 98
+
+    $default  reduce using rule 166 (condition)
+
+
+state 444
+
+   49 ifstatementsforloops: NEWLINE .
+
+    $default  reduce using rule 49 (ifstatementsforloops)
+
+
+state 445
+
+   54 ifstatementsforloops: PASS .
+
+    $default  reduce using rule 54 (ifstatementsforloops)
+
+
+state 446
+
+   53 ifstatementsforloops: stm .
+
+    $default  reduce using rule 53 (ifstatementsforloops)
+
+
+state 447
+
+   46 ifstatementsforloops: ifstatementsforloops . simple_stmt_break NEWLINE
+   48                     | ifstatementsforloops . condition
+   50                     | ifstatementsforloops . NEWLINE
+   52                     | ifstatementsforloops . stm
+   55                     | ifstatementsforloops . PASS
+   57                     | ifstatementsforloops . listrule NEWLINE
+  147 ifblockforloops: NEWLINE INDENTAITON ifstatementsforloops . DENTAITON
+
+    PRINT           shift, and go to state 1
+    IDENTIFIER      shift, and go to state 443
+    DENTAITON       shift, and go to state 461
+    NEWLINE         shift, and go to state 462
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    FOR             shift, and go to state 6
+    WHILE           shift, and go to state 7
+    INPUT           shift, and go to state 8
+    TRY             shift, and go to state 9
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+    BREAK           shift, and go to state 263
+    CONTINUE        shift, and go to state 264
+    SQUAREBL        shift, and go to state 10
+    PASS            shift, and go to state 463
+
+    stm                go to state 464
+    simple_stmt_break  go to state 465
+    assignment         go to state 268
+    condition          go to state 466
+    whileloop          go to state 248
+    for                go to state 249
+    for_header         go to state 23
+    tryrule            go to state 250
+    try                go to state 25
+    try_except         go to state 26
+    output             go to state 252
+    in                 go to state 253
+    listrule           go to state 467
+
+
+state 448
+
+   51 ifstatementsforloops: simple_stmt_break . NEWLINE
+
+    NEWLINE  shift, and go to state 468
+
+
+state 449
+
+   47 ifstatementsforloops: condition .
+
+    $default  reduce using rule 47 (ifstatementsforloops)
+
+
+state 450
+
+   56 ifstatementsforloops: listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 469
+
+
+state 451
+
+  146 elsestatementforloops: ELSE COLON . ifblockforloops
+
+    NEWLINE  shift, and go to state 408
+
+    ifblockforloops  go to state 470
+
+
+state 452
+
+  140 elifstatementforloops: ELIF LBRACKET . condition RBRACKET COLON ifblockforloops
+  141                      | ELIF LBRACKET . condition RBRACKET COLON ifblockforloops elsestatementforloops
+  142                      | ELIF LBRACKET . condition RBRACKET COLON ifblockforloops elifstatementforloops
+
+    IDENTIFIER      shift, and go to state 36
+    STRING_LITERAL  shift, and go to state 37
+    NUMBER          shift, and go to state 38
+    TRUE            shift, and go to state 40
+    FALSE           shift, and go to state 41
+
+    condition  go to state 471
+
+
+state 453
+
+  143 elifstatementforloops: ELIF condition . COLON ifblockforloops
+  144                      | ELIF condition . COLON ifblockforloops elsestatementforloops
+  145                      | ELIF condition . COLON ifblockforloops elifstatementforloops
+
+    COLON  shift, and go to state 472
+
+
+state 454
+
+  230 except_name: EXCEPT IDENTIFIER AS IDENTIFIER COLON NEWLINE INDENTAITON trystatements DENTAITON .
+
+    $default  reduce using rule 230 (except_name)
+
+
+state 455
+
+   36 statements: statements simple_stmt_return NEWLINE .
+
+    $default  reduce using rule 36 (statements)
+
+
+state 456
+
+   44 statements: statements listrule NEWLINE .
+
+    $default  reduce using rule 44 (statements)
+
+
+state 457
+
+  157 elifstatement: ELIF LBRACKET condition RBRACKET COLON ifblock elifstatement .
+
+    $default  reduce using rule 157 (elifstatement)
+
+
+state 458
+
+  156 elifstatement: ELIF LBRACKET condition RBRACKET COLON ifblock elsestatement .
+
+    $default  reduce using rule 156 (elifstatement)
+
+
+state 459
+
+  134 ifconditionforloops: IF LBRACKET condition RBRACKET COLON ifblockforloops elifstatementforloops .
+
+    $default  reduce using rule 134 (ifconditionforloops)
+
+
+state 460
+
+  135 ifconditionforloops: IF LBRACKET condition RBRACKET COLON ifblockforloops elsestatementforloops .
+
+    $default  reduce using rule 135 (ifconditionforloops)
+
+
+state 461
+
+  147 ifblockforloops: NEWLINE INDENTAITON ifstatementsforloops DENTAITON .
+
+    $default  reduce using rule 147 (ifblockforloops)
+
+
+state 462
+
+   50 ifstatementsforloops: ifstatementsforloops NEWLINE .
+
+    $default  reduce using rule 50 (ifstatementsforloops)
+
+
+state 463
+
+   55 ifstatementsforloops: ifstatementsforloops PASS .
+
+    $default  reduce using rule 55 (ifstatementsforloops)
+
+
+state 464
+
+   52 ifstatementsforloops: ifstatementsforloops stm .
+
+    $default  reduce using rule 52 (ifstatementsforloops)
+
+
+state 465
+
+   46 ifstatementsforloops: ifstatementsforloops simple_stmt_break . NEWLINE
+
+    NEWLINE  shift, and go to state 473
+
+
+state 466
+
+   48 ifstatementsforloops: ifstatementsforloops condition .
+
+    $default  reduce using rule 48 (ifstatementsforloops)
+
+
+state 467
+
+   57 ifstatementsforloops: ifstatementsforloops listrule . NEWLINE
+
+    NEWLINE  shift, and go to state 474
+
+
+state 468
+
+   51 ifstatementsforloops: simple_stmt_break NEWLINE .
+
+    $default  reduce using rule 51 (ifstatementsforloops)
+
+
+state 469
+
+   56 ifstatementsforloops: listrule NEWLINE .
+
+    $default  reduce using rule 56 (ifstatementsforloops)
+
+
+state 470
+
+  146 elsestatementforloops: ELSE COLON ifblockforloops .
+
+    $default  reduce using rule 146 (elsestatementforloops)
+
+
+state 471
+
+  140 elifstatementforloops: ELIF LBRACKET condition . RBRACKET COLON ifblockforloops
+  141                      | ELIF LBRACKET condition . RBRACKET COLON ifblockforloops elsestatementforloops
+  142                      | ELIF LBRACKET condition . RBRACKET COLON ifblockforloops elifstatementforloops
+
+    RBRACKET  shift, and go to state 475
+
+
+state 472
+
+  143 elifstatementforloops: ELIF condition COLON . ifblockforloops
+  144                      | ELIF condition COLON . ifblockforloops elsestatementforloops
+  145                      | ELIF condition COLON . ifblockforloops elifstatementforloops
+
+    NEWLINE  shift, and go to state 408
+
+    ifblockforloops  go to state 476
+
+
+state 473
+
+   46 ifstatementsforloops: ifstatementsforloops simple_stmt_break NEWLINE .
+
+    $default  reduce using rule 46 (ifstatementsforloops)
+
+
+state 474
+
+   57 ifstatementsforloops: ifstatementsforloops listrule NEWLINE .
+
+    $default  reduce using rule 57 (ifstatementsforloops)
+
+
+state 475
+
+  140 elifstatementforloops: ELIF LBRACKET condition RBRACKET . COLON ifblockforloops
+  141                      | ELIF LBRACKET condition RBRACKET . COLON ifblockforloops elsestatementforloops
+  142                      | ELIF LBRACKET condition RBRACKET . COLON ifblockforloops elifstatementforloops
+
+    COLON  shift, and go to state 477
+
+
+state 476
+
+  143 elifstatementforloops: ELIF condition COLON ifblockforloops .
+  144                      | ELIF condition COLON ifblockforloops . elsestatementforloops
+  145                      | ELIF condition COLON ifblockforloops . elifstatementforloops
+
+    ELSE  shift, and go to state 427
+    ELIF  shift, and go to state 428
+
+    $default  reduce using rule 143 (elifstatementforloops)
+
+    elifstatementforloops  go to state 478
+    elsestatementforloops  go to state 479
+
+
+state 477
+
+  140 elifstatementforloops: ELIF LBRACKET condition RBRACKET COLON . ifblockforloops
+  141                      | ELIF LBRACKET condition RBRACKET COLON . ifblockforloops elsestatementforloops
+  142                      | ELIF LBRACKET condition RBRACKET COLON . ifblockforloops elifstatementforloops
+
+    NEWLINE  shift, and go to state 408
+
+    ifblockforloops  go to state 480
+
+
+state 478
+
+  145 elifstatementforloops: ELIF condition COLON ifblockforloops elifstatementforloops .
+
+    $default  reduce using rule 145 (elifstatementforloops)
+
+
+state 479
+
+  144 elifstatementforloops: ELIF condition COLON ifblockforloops elsestatementforloops .
+
+    $default  reduce using rule 144 (elifstatementforloops)
+
+
+state 480
+
+  140 elifstatementforloops: ELIF LBRACKET condition RBRACKET COLON ifblockforloops .
+  141                      | ELIF LBRACKET condition RBRACKET COLON ifblockforloops . elsestatementforloops
+  142                      | ELIF LBRACKET condition RBRACKET COLON ifblockforloops . elifstatementforloops
+
+    ELSE  shift, and go to state 427
+    ELIF  shift, and go to state 428
+
+    $default  reduce using rule 140 (elifstatementforloops)
+
+    elifstatementforloops  go to state 481
+    elsestatementforloops  go to state 482
+
+
+state 481
+
+  142 elifstatementforloops: ELIF LBRACKET condition RBRACKET COLON ifblockforloops elifstatementforloops .
+
+    $default  reduce using rule 142 (elifstatementforloops)
+
+
+state 482
+
+  141 elifstatementforloops: ELIF LBRACKET condition RBRACKET COLON ifblockforloops elsestatementforloops .
+
+    $default  reduce using rule 141 (elifstatementforloops)

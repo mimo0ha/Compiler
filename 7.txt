@@ -1,0 +1,29 @@
+if 7 :
+    print(10)
+else :
+    print("eleven")
+def m ("anna",x):
+    if 15 :
+        print("if in def")
+    elif 16 :
+        return "return in if"
+    else:
+        return "hii else"
+    while 6 :
+        if 20 :
+            break
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
